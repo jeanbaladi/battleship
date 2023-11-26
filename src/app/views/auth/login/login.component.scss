@@ -1,0 +1,26 @@
+.login {
+    height: 500px;
+    &__form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: calc(100% - 40px);
+        mat-form-field {
+            width: 100%;
+        }
+    }
+    &__createAccount {
+        height: 40px;
+        text-align: right;
+        b {
+            cursor: pointer;
+        }
+    }
+    .forgotPassword {
+        margin: 0;
+        padding: 0;
+        text-align: right;
+        height: 20px;
+        cursor: pointer;
+    }
+}

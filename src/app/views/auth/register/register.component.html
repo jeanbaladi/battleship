@@ -1,1 +1,15 @@
-<p>register works!</p>
+<div class="register">
+    <form [formGroup]="registerForm" (ngSubmit)="register()" class="register__form">
+        <mat-form-field>
+            <mat-label>user name</mat-label>
+            <input matInput type="text" formControlName="userName" />
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput type="password" formControlName="password" />
+        </mat-form-field>
+        <button mat-raised-button type="submit" color="accent">Register</button>
+    </form>
+    <div class="alreadyAccount">
+        <p>Do you already have an account? <b (click)="login.emit('login')">Login</b></p>
+    </div>
+</div>

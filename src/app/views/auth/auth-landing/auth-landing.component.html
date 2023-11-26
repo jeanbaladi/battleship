@@ -1,1 +1,13 @@
-auth landing
+<main class="container">
+    <div class="login">
+        <app-login (createAccount)="setStatus($event)"></app-login>
+    </div>
+    <div class="register">
+        <app-register (login)="setStatus($event)"></app-register>
+    </div>
+    <div class="imageSection" 
+        [ngStyle]="{'background-image': 'url(' + dataImg.src + ')' }"
+        [ngClass]="dataImg.class"
+    >
+    </div>
+</main>

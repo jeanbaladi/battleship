@@ -1,0 +1,21 @@
+.register {
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    &__form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: calc(100% - 40px);
+    }
+    .alreadyAccount {
+        margin: 0;
+        padding: 0;
+        text-align: right;
+        height: 40px;
+        b {
+            cursor: pointer;
+        }
+    }
+}

@@ -1,0 +1,39 @@
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    .login, .register {
+        width: 350px;
+        background-color: #fefefe;
+        padding: 0 25px;
+        box-sizing: border-box;
+    }
+    .login {
+        border-top-left-radius: 10px;
+    }
+    .register {
+        border-top-right-radius: 10px;
+    }
+    .imageSection {
+        position: absolute;
+        width: 350px;
+        height: 500px;
+        z-index: 1;
+        left: 50%;
+        transition-duration: 250ms;
+        background-position: center !important;
+    }
+    .imageSection.login {
+        transform: translateX(calc((50% - 185px) * -1));
+        border-top-right-radius: 10px !important;
+        border-top-left-radius: 0 !important;
+    }
+    .imageSection.register {
+        transform: translateX(calc((50% + 185px) * -1));
+        border-top-left-radius: 10px !important;
+        border-top-right-radius: 0 !important;
+    }
+}

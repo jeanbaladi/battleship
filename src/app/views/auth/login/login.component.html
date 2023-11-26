@@ -1,1 +1,18 @@
-<p>login works!</p>
+<div class="login">
+    <form [formGroup]="loginForm" (ngSubmit)="login()" class="login__form">
+        <mat-form-field>
+            <mat-label>user name</mat-label>
+            <input matInput type="text" formControlName="userName" />
+        </mat-form-field>
+        <div>
+            <p class="forgotPassword">Forgot password?</p>
+            <mat-form-field>
+                <input matInput type="password" formControlName="password" />
+            </mat-form-field>
+        </div>
+        <button mat-raised-button type="submit" color="accent">Login</button> 
+    </form>
+    <div class="login__createAccount">
+        <p>Don't have an account? <b (click)="createAccount.emit('register')">Create Now</b></p>
+    </div>
+</div>
