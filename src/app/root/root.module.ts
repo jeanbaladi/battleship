@@ -9,13 +9,13 @@ import { MaterialModule } from '../shared';
   declarations: [],
   imports: [
     CommonModule,
-    MaterialModule
+    MaterialModule,
   ],
   exports: [
     RootRoutingModule,
     MaterialModule,
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,    
   ]
 })
 export class RootModule { }

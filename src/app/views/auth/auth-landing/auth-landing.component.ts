@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { auth } from 'src/app/types';
+import { environment } from 'src/environments/environments';
+import { user } from 'src/app/interfaces';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-auth-landing',
@@ -17,13 +20,15 @@ export class AuthLandingComponent implements OnInit {
     class: this.authStatus
   };
 
-  constructor() {
+  constructor(private _authService: AuthService) {
 
 
   }
 
-  ngOnInit(): void {
-    
+  ngOnInit(): void {}
+
+  login(user: user){
+    this._authService.login(user).subscribe(res => console.log(res));
   }
 
   setStatus(status : auth) {

@@ -1,6 +1,9 @@
 <main class="container">
     <div class="login">
-        <app-login (createAccount)="setStatus($event)"></app-login>
+        <app-login 
+            (createAccount)="setStatus($event)"
+            (access)="login($event)"
+        ></app-login>
     </div>
     <div class="register">
         <app-register (login)="setStatus($event)"></app-register>

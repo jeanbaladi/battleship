@@ -2,10 +2,10 @@
     <form [formGroup]="registerForm" (ngSubmit)="register()" class="register__form">
         <mat-form-field>
             <mat-label>user name</mat-label>
-            <input matInput type="text" formControlName="userName" />
+            <input matInput type="text" formControlName="Name" />
         </mat-form-field>
         <mat-form-field>
-            <input matInput type="password" formControlName="password" />
+            <input matInput type="password" formControlName="Password" />
         </mat-form-field>
         <button mat-raised-button type="submit" color="accent">Register</button>
     </form>
