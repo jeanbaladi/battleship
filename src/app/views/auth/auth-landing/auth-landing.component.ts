@@ -39,7 +39,7 @@ export class AuthLandingComponent implements OnInit {
   }
 
   public loginSuccess(){
-    this.route.navigate([`/profile/${this._authService.currentUser.profile.identityId}`]);
+    this.route.navigate([`battleship/profile/${this._authService.currentUser.profile.identityId}`]);
   }
 
   setStatus(status : auth) {;
