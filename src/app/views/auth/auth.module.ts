@@ -19,8 +19,5 @@ import { AuthService } from './auth.service';
     AuthRoutingModule,
     RootModule,
   ],
-  providers: [
-    AuthService
-  ]
 })
 export class AuthModule { }

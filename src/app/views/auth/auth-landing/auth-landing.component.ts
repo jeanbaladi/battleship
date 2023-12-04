@@ -4,6 +4,7 @@ import { auth } from 'src/app/types';
 import { environment } from 'src/environments/environments';
 import { user } from 'src/app/interfaces';
 import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth-landing',
@@ -20,7 +21,7 @@ export class AuthLandingComponent implements OnInit {
     class: this.authStatus
   };
 
-  constructor(private _authService: AuthService) {
+  constructor(private _authService: AuthService, private route: Router) {
 
 
   }
@@ -28,14 +29,22 @@ export class AuthLandingComponent implements OnInit {
   ngOnInit(): void {}
 
   login(user: user){
-    this._authService.login(user).subscribe(res => console.log(res));
+    this._authService.login(user).subscribe((response) => {
+      if(response){
+        this.loginSuccess();
+      }else{
+        console.log('error', response);
+      }
+    });
   }
 
-  setStatus(status : auth) {
-    console.log('status', status);
+  public loginSuccess(){
+    this.route.navigate([`/profile/${this._authService.currentUser.profile.identityId}`]);
+  }
+
+  setStatus(status : auth) {;
     this.authStatus = status;
     this.dataImg.class = status;
     this.dataImg.src = `../../../../assets/images/${status}.jpg`;
   }
-
 }

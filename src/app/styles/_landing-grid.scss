@@ -1,0 +1,14 @@
+@mixin landing-grid-xl {
+    display: grid;
+    grid-template-columns: 80px calc(100vw - 80px)
+}
+@mixin landing-grid-l {
+
+}
+@mixin landing-grid-small {
+
+}
+
+.xl {
+    @include landing-grid-xl;
+}

@@ -1,0 +1,17 @@
+<mat-card>
+    <mat-card-header>Personal information</mat-card-header>
+    <mat-card-content>
+        <p>
+            Name: <b>{{userInfo.userName}}</b>
+            <mat-icon>edit</mat-icon>
+        </p>
+        <p>
+            Address: <b>{{userInfo.address || "you don't have any address record"}}</b>
+            <mat-icon>edit</mat-icon>
+        </p>
+        <p>
+            Elo: <b>{{userInfo.elo || "you don't have any address record"}}</b>
+            <mat-icon>edit</mat-icon>
+        </p>
+    </mat-card-content>
+</mat-card>
