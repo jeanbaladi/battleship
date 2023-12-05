@@ -1,0 +1,11 @@
+<ul 
+    @fadeIn
+    #listItem
+    [ngStyle]="{'transform': 'translateY(' +  listItem.offsetHeight + 'px)' }"
+    (click)="triggerMenu()"
+    *ngIf="itemsMenuIsOpen"
+>
+    @for (item of routes; track item) {
+        <li> {{ item }} </li>
+    } 
+</ul>

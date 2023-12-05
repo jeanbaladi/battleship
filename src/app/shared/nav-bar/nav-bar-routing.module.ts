@@ -14,16 +14,16 @@ const routes: Routes = [
       { 
         path: 'profile', 
         loadChildren : () => import('src/app/views/profile/profile.module')
-        .then(m => m.ProfileModule), canActivate:[authGuard] 
+        .then(m => m.ProfileModule), 
       },
       {
         path:"lobby" , 
         loadChildren : () => import('src/app/views/lobby/lobby.module')
-          .then(m => m.LobbyModule), canActivate:[authGuard]
+          .then(m => m.LobbyModule),
       },
       {
         path:"inGame:idGame" , loadChildren : () => import('src/app/views/in-game/in-game.module')
-          .then(m => m.InGameModule), canActivate:[authGuard],
+          .then(m => m.InGameModule),
       }
     ]
   },
