@@ -1,0 +1,17 @@
+<div class="grid-xl">
+    <router-outlet>
+        <nav class="navBar">
+            <mat-icon 
+                class="material-symbols-outlined navBar__icon"
+                (click)="triggerMenu()"
+            >
+                {{itemsMenuIsOpen ? 'close' : 'person'}}
+            </mat-icon>
+            <app-items 
+                [(itemsMenuIsOpen)]="itemsMenuIsOpen"
+                (routeChanged)="handlerRoutes($event)"
+                [routes]="routes"
+            ></app-items>
+        </nav>
+    </router-outlet>
+</div>

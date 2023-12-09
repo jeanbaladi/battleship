@@ -31,8 +31,6 @@ export class RenewTokenInterceptor implements HttpInterceptor {
       map((response : any) => {
         let newToken : string = response?.headers?.get('authorization');
         if(newToken){
-          console.log('newToken',newToken);
-          
           localStorage.setItem('Token', newToken);
           this.authService.setCurrentToken(newToken);
         }
@@ -40,12 +38,6 @@ export class RenewTokenInterceptor implements HttpInterceptor {
       }),
       catchError((err : HttpErrorResponse) => {
         this.authService.logout();
-        //alert(`error: ${err.status}. \n msg: ${err.error}`);
-        if(err.error == "Token ya utilizado"){
-          //this.api.logout();
-          console.log(err);
-          
-        }
         return throwError(() => err);
       })
     );

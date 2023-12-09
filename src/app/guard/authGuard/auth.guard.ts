@@ -8,7 +8,6 @@ export const authGuard = () => {
   const router = inject(Router);
   const authService = inject(AuthService);
   const currentUser : Auth = authService.currentUser;
-  // console.log('debugger', currentUser.profile.identityId);
   if(currentUser.profile.identityId) return true;
   
   const token = localStorage.getItem('Token');

@@ -1,11 +1,21 @@
-<ul 
-    @fadeIn
-    #listItem
-    [ngStyle]="{'transform': 'translateY(' +  listItem.offsetHeight + 'px)' }"
-    (click)="triggerMenu()"
+
+<div
+    @fadeIn 
     *ngIf="itemsMenuIsOpen"
+    class="nav" 
 >
-    @for (item of routes; track item) {
-        <li> {{ item }} </li>
-    } 
-</ul>
+    <ul 
+        #listItem
+        class="nav__listItem"
+    >
+        <li 
+            (click)="selectedRotue(item)"
+            class="nav__item"
+            *ngFor="let item of routes;"
+            [ngClass]="{'active': item.active}"
+        >
+            {{ item.path }}
+        </li>
+       
+    </ul>
+</div>

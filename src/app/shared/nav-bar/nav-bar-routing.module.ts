@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from 'src/app/guard/authGuard/auth.guard';
 import { ProfileModule } from 'src/app/views/profile/profile.module';
-import { NavBarComponent } from './nav-bar.component';
+import { NavBarComponent } from './nav-bar-component/nav-bar.component';
 import { LobbyModule } from 'src/app/views/lobby/lobby.module';
 import { InGameModule } from 'src/app/views/in-game/in-game.module';
 

@@ -5,7 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared';
 import { AuthService } from '../views/auth/auth.service';
 import { NavBarService } from '../shared/nav-bar/nav-bar.service';
-import { NavBarComponent } from '../shared/nav-bar/nav-bar.component';
+import { NavBarComponent } from '../shared/nav-bar/nav-bar-component/nav-bar.component';
 
 
 @NgModule({

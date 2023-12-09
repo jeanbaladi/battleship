@@ -1,17 +1,24 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { navbarElements } from 'src/app/interfaces';
+import { PathsService } from 'src/app/services/paths.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class NavBarService {
-  private _routes: Array<string> = [
-    "logout",
-    "profile",
-    "lobby"
-  ]
-  constructor() { }
+export class NavBarService extends PathsService {
 
-  public get routes() {
-    return this._routes;
+  constructor(router: Router,) { 
+    super(router);
+  }
+
+  
+  public routes(): Array<navbarElements> {
+    return this.Routes;
+  }
+
+  handlerRoutes(path: string){
+    this.router.navigate([`/${path}`])
   }
 }
+

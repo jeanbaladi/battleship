@@ -1,6 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { NavBarService } from '../nav-bar.service';
+import { navbarElements } from 'src/app/interfaces';
 
 @Component({
   selector: 'app-items',
@@ -10,10 +10,10 @@ import { NavBarService } from '../nav-bar.service';
     trigger('fadeIn', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateY(0)' }),
-        animate('500ms', style({ opacity: 1,  transform: 'translateY(40px)' }))
+        animate('500ms', style({ opacity: 1,  transform: 'translateY(100px)' }))
       ],),
       transition(':leave', [
-        style({ opacity: 1,  transform: 'translateY(40px)' }),  // initial
+        style({ opacity: 1,  transform: 'translateY(100px)' }),  // initial
         animate('500ms',
           style({ opacity: 0, transform: 'translateY(0)'}))  // final
       ])
@@ -23,13 +23,16 @@ import { NavBarService } from '../nav-bar.service';
 export class ItemsComponent {
   @Input() itemsMenuIsOpen: boolean = true;
   @Output() itemsMenuIsOpenChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() routeChanged: EventEmitter<navbarElements> = new EventEmitter<navbarElements>();
+  @Input() routes: Array<navbarElements> = [];
 
-  public routes: Array<string> = [];
-  constructor(private navBarService: NavBarService){
-    this.routes = this.navBarService.routes;
+  constructor(){
   }
 
   triggerMenu(){
     this.itemsMenuIsOpen = !this.itemsMenuIsOpen;
+  }
+  selectedRotue(route: navbarElements){
+    this.routeChanged.emit(route);
   }
 }

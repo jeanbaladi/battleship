@@ -6,7 +6,7 @@ import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-br
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { RenewTokenInterceptor } from './interceptor/renewToken.interceptor';
 import { AuthService } from './views/auth/auth.service';
-import { NavBarComponent } from './shared/nav-bar/nav-bar.component';
+import { NavBarComponent } from './shared/nav-bar/nav-bar-component/nav-bar.component';
 import { NavBarService } from './shared/nav-bar/nav-bar.service';
 import { MaterialModule } from './shared';
 import { ItemsComponent } from './shared/nav-bar/items/items.component';

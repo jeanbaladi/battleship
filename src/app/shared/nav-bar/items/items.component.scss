@@ -1,3 +1,22 @@
-ul {
-    transform: translateY(30px);
+.nav{
+    background-color: white;
+    transform: translateY(100px);
+    &__listItem{ 
+        padding: 0px;
+        box-shadow: 3px 3px 7px #cecece, -4px 0px 7px #cecece;
+        font-size: 1.3em;
+    }
+    &__item {
+        list-style-type: none;
+        padding: 15px;
+        margin: 0;
+        transition-duration: 0.25s;
+        &:hover {
+            background-color: #f5f5f5;
+        }
+    }
+    .active {
+        background-color: #f5f5f5;
+        font-weight: bold;
+    }
 }

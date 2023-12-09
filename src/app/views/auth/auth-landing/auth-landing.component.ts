@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environments';
 import { user } from 'src/app/interfaces';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { NavBarService } from 'src/app/shared/nav-bar/nav-bar.service';
 
 @Component({
   selector: 'app-auth-landing',
@@ -21,7 +22,9 @@ export class AuthLandingComponent implements OnInit {
     class: this.authStatus
   };
 
-  constructor(private _authService: AuthService, private route: Router) {
+  constructor(
+    private _authService: AuthService, 
+    private _navBarService: NavBarService) {
 
 
   }
@@ -39,7 +42,7 @@ export class AuthLandingComponent implements OnInit {
   }
 
   public loginSuccess(){
-    this.route.navigate([`battleship/profile/${this._authService.currentUser.profile.identityId}`]);
+    this._navBarService.handlerRoutes(`battleship/profile/${this._authService.currentUser.profile.identityId}`);
   }
 
   setStatus(status : auth) {;
