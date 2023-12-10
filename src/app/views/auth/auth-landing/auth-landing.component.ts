@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { auth } from 'src/app/types';
 import { environment } from 'src/environments/environments';
-import { user } from 'src/app/interfaces';
+import { user, Auth, ResponseHTTP } from 'src/app/interfaces'
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { NavBarService } from 'src/app/shared/nav-bar/nav-bar.service';
@@ -32,16 +32,18 @@ export class AuthLandingComponent implements OnInit {
   ngOnInit(): void {}
 
   login(user: user){
-    this._authService.login(user).subscribe((response) => {
-      if(response){
+    this._authService.login(user).subscribe((response: ResponseHTTP<Auth>) => {
+      if(response.isSuccess){
         this.loginSuccess();
       }else{
-        console.log('error', response);
+        console.log('error', response.result);
       }
     });
   }
 
   public loginSuccess(){
+    console.log(this._authService.currentUser.profile.identityId);
+    
     this._navBarService.handlerRoutes(`battleship/profile/${this._authService.currentUser.profile.identityId}`);
   }
 

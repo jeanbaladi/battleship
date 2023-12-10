@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
-import { user, Auth } from 'src/app/interfaces'
+import { user, Auth, ResponseHTTP } from 'src/app/interfaces'
 import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { Router } from '@angular/router';
 @Injectable({
@@ -13,17 +13,17 @@ export class AuthService extends ApiService{
     super(http);
   }
 
-  public login(user: user): Observable<Auth> {
-    return this.post<Auth>(`${this.apiURL}users/login`, user)
-      .pipe(
-        tap(res => {
-          if(res){
-            this.currentUser = res;
-            localStorage.setItem('Token', res.authenticationResponse.token as string);
-            this.setCurrentToken(res.authenticationResponse.token);
-          }
-        })
-      );
+  public login(user: user): Observable<ResponseHTTP<Auth>> {    
+    return this.post<ResponseHTTP<Auth>>(`${this.apiURL}users/login`, user).pipe(
+      tap((res: ResponseHTTP<Auth>) => {
+        if(res.isSuccess){
+          const {result} = res;
+          this.currentUser = result;
+          localStorage.setItem('Token', result.authenticationResponse.token as string);
+          this.setCurrentToken(result.authenticationResponse.token);
+        }
+      })
+    );
   }
 
   public set isLogginByRefresh(status: boolean) {
@@ -33,16 +33,17 @@ export class AuthService extends ApiService{
     return this.isLogginByRefresh$.asObservable();
   }
 
-  public loginByRefresh(token: string) {
+  public loginByRefresh(token: string): Observable<ResponseHTTP<Auth>> {
     const params = new HttpParams()
       .set('token', token)
-    return this.post<Auth>(`${this.apiURL}users/loginByRefresh`, null, params)
+    return this.post<ResponseHTTP<Auth>>(`${this.apiURL}users/loginByRefresh`, null, params)
       .pipe(
-        tap(res => {
-          if(res){
-            this.currentUser = res;
-            localStorage.setItem('Token', res.authenticationResponse.token as string);
-            this.setCurrentToken(res.authenticationResponse.token);
+        tap((res: ResponseHTTP<Auth>) => {
+          if(res.isSuccess){
+            const {result} = res;
+            this.currentUser = result;
+            localStorage.setItem('Token', result.authenticationResponse.token as string);
+            this.setCurrentToken(result.authenticationResponse.token);
           }
         })
       )
