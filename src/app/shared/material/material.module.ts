@@ -4,14 +4,19 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatMenuModule} from '@angular/material/menu';
+import {CdkDrag, DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
+  imports: [CdkDrag],
   exports:[
     MatCardModule,
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatMenuModule,
+    DragDropModule
   ]
 })
 export class MaterialModule { }

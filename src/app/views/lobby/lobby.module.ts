@@ -7,6 +7,8 @@ import { CardGamesComponent } from './card-games/card-games.component';
 import { CreateGameComponent } from './create-game/create-game.component';
 import { JointBtnComponent } from './card-games/joint-btn/joint-btn.component';
 import { DeleteGameComponent } from './card-games/delete-game/delete-game.component';
+import { RootModule } from 'src/app/root/root.module';
+import { LobbyService } from './lobby.service';
 
 
 @NgModule({
@@ -17,9 +19,10 @@ import { DeleteGameComponent } from './card-games/delete-game/delete-game.compon
     JointBtnComponent,
     DeleteGameComponent
   ],
+  providers:[LobbyService],
   imports: [
-    CommonModule,
-    LobbyRoutingModule
+    LobbyRoutingModule,
+    RootModule,
   ]
 })
 export class LobbyModule { }

@@ -1,0 +1,9 @@
+.rooms {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 20px;
+    margin: 20px;
+    .room {
+        width: 100%;
+    }
+}

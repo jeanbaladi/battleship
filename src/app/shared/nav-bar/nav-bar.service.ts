@@ -17,8 +17,11 @@ export class NavBarService extends PathsService {
     return this.Routes;
   }
 
-  handlerRoutes(path: string){
-    this.router.navigate([`/${path}`])
+  handlerRoutes(path: string, extras?: any, id?:string){
+    if(!!id)
+      this.router.navigate([`/${path}`,id], extras)
+    else
+      this.router.navigate([`/${path}`], extras)
   }
 }
 

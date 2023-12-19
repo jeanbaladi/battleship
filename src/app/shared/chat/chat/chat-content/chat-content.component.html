@@ -1,0 +1,39 @@
+<div 
+    @fadeIn 
+    *ngIf="trigger"
+    class="chatContent"
+>
+    <div 
+        class="chatContent__messages"
+        #chatContentMessages
+    >
+        <div 
+            *ngFor="let msg of messages"
+            [ngClass]="msg.position"
+        >
+            <b *ngIf="msg.showSender">{{msg.sender}}</b>
+            <p>{{msg.msg}}</p>
+        </div>
+    </div>
+    <div class="chatContent__input">
+        <form  
+            [formGroup]="formMsg"
+            (submit)="sendMsg()"
+        >
+            <mat-form-field appearance="outline">
+                <mat-label>Write</mat-label>
+                <input 
+                    matInput 
+                    #msg
+                    formControlName="msg"
+                >
+                <button 
+                    mat-icon-button matSuffix 
+                    [disabled]="!msg.value"
+                >
+                    <mat-icon>send</mat-icon>
+                </button>
+            </mat-form-field>
+        </form>
+    </div>
+</div>

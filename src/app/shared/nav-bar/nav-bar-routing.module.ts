@@ -22,7 +22,7 @@ const routes: Routes = [
           .then(m => m.LobbyModule),
       },
       {
-        path:"inGame:idGame" , loadChildren : () => import('src/app/views/in-game/in-game.module')
+        path:"inGame/:gameId" , loadChildren : () => import('src/app/views/in-game/in-game.module')
           .then(m => m.InGameModule),
       }
     ]

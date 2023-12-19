@@ -27,6 +27,7 @@ const INITIAL_VALUE : Auth = {
 export abstract class ApiService {
   private _currentUser : Auth = INITIAL_VALUE;
   private _apiURL = environment.apiUrl;
+
   constructor(public http: HttpClient) { }
 
   public get apiURL(): string {
@@ -50,13 +51,13 @@ export abstract class ApiService {
   }
 
   public get<T>(endPoint : string): Observable<T>{
-    return this.http.get<T>(endPoint);
+    return this.http.get<T>(`${this.apiURL}/${endPoint}`);
   }
   public post<T>(endPoint : string, body: any, params: HttpParams = new HttpParams()): Observable<T>{
-    return this.http.post<T>(endPoint, body, {params});
+    return this.http.post<T>(`${this.apiURL}/${endPoint}`, body, {params});
   }
   public Delete<T>(endPoint : string): Observable<T>{
-    return this.http.delete<T>(endPoint);
+    return this.http.delete<T>(`${this.apiURL}/${endPoint}`);
   }
 
 }

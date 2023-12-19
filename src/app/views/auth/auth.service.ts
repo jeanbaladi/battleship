@@ -14,7 +14,7 @@ export class AuthService extends ApiService{
   }
 
   public login(user: user): Observable<ResponseHTTP<Auth>> {    
-    return this.post<ResponseHTTP<Auth>>(`${this.apiURL}users/login`, user).pipe(
+    return this.post<ResponseHTTP<Auth>>(`users/login`, user).pipe(
       tap((res: ResponseHTTP<Auth>) => {
         if(res.isSuccess){
           const {result} = res;
@@ -36,7 +36,7 @@ export class AuthService extends ApiService{
   public loginByRefresh(token: string): Observable<ResponseHTTP<Auth>> {
     const params = new HttpParams()
       .set('token', token)
-    return this.post<ResponseHTTP<Auth>>(`${this.apiURL}users/loginByRefresh`, null, params)
+    return this.post<ResponseHTTP<Auth>>(`users/loginByRefresh`, null, params)
       .pipe(
         tap((res: ResponseHTTP<Auth>) => {
           if(res.isSuccess){

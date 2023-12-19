@@ -1,1 +1,18 @@
-<p>card-games works!</p>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            Created by: {{gameCreator.createdBy}}
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <p>
+            Room name: {{gameCreator.roomName}}
+        </p>
+        <p>
+            Id: {{gameCreator.id}}
+        </p>
+    </mat-card-content>
+    <mat-card-actions>
+        <app-joint-btn [gameId]="gameCreator.id"></app-joint-btn>
+    </mat-card-actions>
+</mat-card>

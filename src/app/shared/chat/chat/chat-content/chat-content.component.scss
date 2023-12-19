@@ -1,0 +1,36 @@
+.chatContent {
+    height: 300px;
+    background: white;
+    width: 250px;
+    padding: 15px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 3px 3px 4px #837d7d;
+    outline: 0.3px solid #837d7d;
+    &__messages {
+        height: calc(100% - 54px);
+        overflow-y: scroll;
+        p {
+            margin: 0;
+        }
+        .right{
+            text-align: right;
+            background-color: #ffdddd;
+            padding: 0 5px;
+        }
+        .left{
+            text-align: left;
+            background-color: #d9ffff;
+            padding: 0 5px;
+        }
+    }
+    &__input{
+        height: 100%;
+        form {
+            height: (78px - 20px);
+            mat-form-field {
+                width: 100%;
+            }
+        }
+    }
+}

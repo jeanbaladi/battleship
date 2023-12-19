@@ -1,1 +1,17 @@
-<p>current-games works!</p>
+<div
+    class="container"
+>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Search room</mat-label>
+        <input matInput placeholder="room name">
+    </mat-form-field>
+    <div 
+        class="rooms"
+    >
+        <app-card-games 
+            class="room" 
+            *ngFor="let room of rooms" 
+            [gameCreator]="room"
+        />
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<div 
+    class="container" 
+    cdkDropListGroup
+>
+    <div 
+        class="ships" 
+        cdkDropList
+    >
+        <div 
+            #shipElement
+            class="ship"
+            cdkDrag 
+            (cdkDragDropped)="dropped($event,shipElement)"
+            (cdkDragStarted)="started($event, ship, shipElement)"
+            *ngFor="let ship of ships"
+            [cdkDragData]="ship"
+        >
+            {{ship.url}}
+        </div>
+    </div>
+    <app-board-game></app-board-game>
+</div>

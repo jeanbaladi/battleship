@@ -1,0 +1,48 @@
+.ships {
+    display: flex;
+    width: 100%;
+    border: 1px solid black;
+    height: 100px;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    .ship {
+        height: 40px;
+        width: 40px;
+        font-size: 2rem;
+        cursor: pointer;
+    }
+}
+
+.cdk-drag-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    cursor: pointer;
+    height: 40px;
+    width: 40px;
+    background-color: red;
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+            0 8px 10px 1px rgba(0, 0, 0, 0.14),
+            0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+opacity: 0;
+}
+
+.cdk-drag-animating {
+transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:last-child {
+border: none;
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+  
