@@ -13,4 +13,7 @@
             <div style="height: 100%;width: 100%;" cdkDrag (cdkDragStarted)="test($event)"  [cdkDragData]="cell">{{cell.idElement}}</div>
         </div>
     </div>
+    <button [disabled]="!startGame" mat-raised-button color="accent">
+        start game
+    </button>
 </div>

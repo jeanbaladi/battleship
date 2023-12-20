@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { ships, shipsInBoard } from 'src/app/interfaces';
+import { boardsData, ships, shipsInBoard } from 'src/app/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +19,22 @@ export class InGameService {
     {id:'2', url:"🚢", length:3, dir: 'y', coordinate: null, boatParts: ['🚢','🔲','💦']},
     {id:'3', url:"🚢", length:4, dir: 'y', coordinate: null, boatParts: ['🚢','🔲','🔲','💦']},
     {id:'4', url:"🚢", length:5, dir: 'y', coordinate: null, boatParts: ['🚢','🔲','🔲','🔲','💦']}
-  ])
+  ]);
 
-  private _shipsInBoard: Array<any> = [];
+  private _startGame: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  private _shipsInBoard: Array<boardsData> = [];
 
   constructor() { }
+
+  public preparedBoard(): Observable<boolean>{
+    return this._startGame.asObservable();
+  }
+
+  public startGame() {
+    console.log(this.ships.length === 0 && this.shipsInBoard.length === 4);
+    this._startGame.next(this.ships.length === 0 && this.shipsInBoard.length === 4);
+  }
 
   public set shipsInBoard(value : Array<any>){
     this._shipsInBoard = value;

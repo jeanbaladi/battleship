@@ -1,7 +1,8 @@
 import { CdkDragStart } from '@angular/cdk/drag-drop';
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ships, shipsInBoard } from 'src/app/interfaces';
 import { InGameService } from '../../inGame.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-board-with-ships',
@@ -9,13 +10,15 @@ import { InGameService } from '../../inGame.service';
   styleUrls: ['./board-with-ships.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BoardWithShipsComponent {
+export class BoardWithShipsComponent implements OnInit, OnDestroy {
   private rows: number = 10;
   private col: number = 10;
   public board: Array<Array<shipsInBoard>> = [];
   public aux: any;
   public lastSelectection: Array<(HTMLElement | null)> = [];
   public repositionShip: Array<any> = [];
+  private _subscriptions$: Array<Subscription> = [];
+  public startGame: boolean = false;
 
   constructor(private _inGameService: InGameService){}
 
@@ -36,6 +39,19 @@ export class BoardWithShipsComponent {
         this.board[i].push(aux);
       }
     }
+
+    this._subscriptions$.push(
+      this._inGameService.preparedBoard().subscribe((response: boolean) => {
+        this.startGame = response;
+      })
+    );
+    
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions$.forEach((sub) => {
+      sub.unsubscribe();
+    })
   }
   /**
    * modifica la propiedad 'dir' del objeto tipo ' ships
@@ -128,7 +144,9 @@ export class BoardWithShipsComponent {
               this.board[Number(cell.id[0])][Number(cell.id[2])].status = 'empty';
             }else if(mode == 'dropped'){
               if(getOnlyTrueValues.length !== data.length){
-                cell.style.background = '#cecece';
+                const x = Number(cell.id[0]);
+                const y = Number(cell.id[2]);
+                this.board[x][y].status = 'empty';
               }else{
                 this.board[Number(cell.id[0])][Number(cell.id[2])].status = 'ocuped';
                 cell.children[0].innerHTML = `
@@ -240,7 +258,12 @@ export class BoardWithShipsComponent {
         if(!isAShipPositioning){
           arrTmp.splice(index,1);
         }
+        this._inGameService.startGame();        
         this._inGameService.ships = arrTmp;
+      }
+      if(mode == 'dropped'){
+        console.log(this._inGameService.shipsInBoard);
+        console.log('debugger',this.board);
       }
   }
   test(cdkDragStart: CdkDragStart<shipsInBoard>){

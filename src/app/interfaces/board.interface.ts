@@ -8,6 +8,10 @@ export interface ships {
 
 }
 
+export interface boardsData {
+    id : Array<shipsInBoard>;
+}
+
 export class shipsInBoard implements ships {
     public id: string = '';
     public length: number = 0;

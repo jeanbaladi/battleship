@@ -14,7 +14,7 @@
             cursor: pointer;
             box-sizing: border-box;
             &:hover {
-                background-color: blue;
+                background-color: $cell-hover-color;
             }
         }
     }
