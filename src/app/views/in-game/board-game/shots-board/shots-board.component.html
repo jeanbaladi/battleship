@@ -1,0 +1,11 @@
+<div class="board">
+    <div class="row" *ngFor="let row of board">
+        <div 
+            class="cell" 
+            *ngFor="let cell of row"
+            [ngStyle]="{'background-color': cell.cellBackgroundColor}"
+        >
+            <div style="height: 100%;width: 100%;" >{{cell.idElement}}</div>
+        </div>
+    </div>
+</div>

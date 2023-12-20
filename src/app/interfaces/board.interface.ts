@@ -30,7 +30,7 @@ export class shipsInBoard implements ships {
     private addCellBackgroundColor(status:'ocuped' | 'empty' | 'hover' | 'wrong'): string {
         switch(status){
             case 'empty':
-                return 'transparent'
+                return '#8ACDD7'
             case 'hover':
                 return '#0e836a'
             case 'wrong':

@@ -1,18 +1,13 @@
+
 .board {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    .row{
-        display: flex;
-        .cell {
-            width: 50px;
-            height: 50px;
-            border: 1px solid red;
-            cursor: pointer;
-            &:hover {
-                background-color: blue;
-            }
-        }
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    hr {
+        border: 1px solid black;
+        width: 100%;
+        margin: 5px;
+        box-sizing: border-box;
     }
 }

@@ -1,0 +1,21 @@
+@import "variables";
+.board {
+    // position: absolute;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
+    .row{
+        display: flex;
+        .cell {
+            width: $cell-size;
+            height: $cell-size;
+            background-color: $water-color;
+            border: $cell-border;
+            cursor: pointer;
+            box-sizing: border-box;
+            &:hover {
+                background-color: blue;
+            }
+        }
+    }
+}
