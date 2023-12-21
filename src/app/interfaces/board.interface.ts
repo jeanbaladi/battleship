@@ -1,3 +1,6 @@
+import { ProfileDTO } from "./auth.interface";
+import { CreateGamingRoom } from "./lobby.interface";
+
 export interface ships {
     id: string,
     length: number,
@@ -9,7 +12,7 @@ export interface ships {
 }
 
 export interface boardsData {
-    id : Array<shipsInBoard>;
+    id : shipsInBoard;
 }
 
 export class shipsInBoard implements ships {
@@ -46,12 +49,19 @@ export class shipsInBoard implements ships {
     }
 }
 
-
-interface boatParts {
-    
-}
-
 export interface coordinate {
     x: string,
     y: string
+}
+
+export interface shots {
+    coordinate: coordinate,
+    impact: boolean
+}
+
+export interface Board
+{
+    boardsData: Array<Array<boardsData>>;
+    profile: ProfileDTO;
+    room: CreateGamingRoom;
 }

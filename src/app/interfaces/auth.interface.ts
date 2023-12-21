@@ -2,6 +2,10 @@ export interface user {
     Name : string,
     Password: string
 };
+export interface ProfileDTO {
+    identityId: string,
+    userName: string,
+}
 export interface Profile {
     id: number,
     identityId: string,

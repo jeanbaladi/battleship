@@ -1,8 +1,10 @@
 import { CdkDragStart } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ships, shipsInBoard } from 'src/app/interfaces';
+import { Board, CreateGamingRoom, ships, shipsInBoard } from 'src/app/interfaces';
 import { InGameService } from '../../inGame.service';
 import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/views/auth/auth.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-board-with-ships',
@@ -19,10 +21,21 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
   public repositionShip: Array<any> = [];
   private _subscriptions$: Array<Subscription> = [];
   public startGame: boolean = false;
-
-  constructor(private _inGameService: InGameService){}
+  public gameId: string = '';
+  public room!: CreateGamingRoom;
+  constructor(
+    private _inGameService: InGameService,
+    private _authService: AuthService,
+    private _route: ActivatedRoute){}
 
   ngOnInit(): void {
+    this.gameId = this._route.snapshot.paramMap.get('gameId') || '';
+    this.room = {
+      createdBy: this._route.snapshot.queryParams['createdBy'],
+      roomName: this._route.snapshot.queryParams['roomName'],
+      id: this.gameId
+    }
+    this._route.data.subscribe(res => console.log('response', res))
     let tmp = 0;
     for (let i = 0; i < this.rows; i++) {
       this.board.push([]);
@@ -53,6 +66,21 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
       sub.unsubscribe();
     })
   }
+
+  readyPlayer() {
+    console.log('this._authService.currentUserDTO',this._authService.currentUserDTO);
+    
+    let newPlayer: Board = {
+      boardsData: this._inGameService.shipsInBoard,
+      profile: this._authService.currentUserDTO,
+      room: this.room
+    }
+    this._inGameService.readyPlayer(newPlayer).subscribe((response) => {
+      console.log('response', response);
+      
+    })
+  }
+
   /**
    * modifica la propiedad 'dir' del objeto tipo ' ships
    */

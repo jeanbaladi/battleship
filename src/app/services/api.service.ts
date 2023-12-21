@@ -54,6 +54,8 @@ export abstract class ApiService {
     return this.http.get<T>(`${this.apiURL}/${endPoint}`);
   }
   public post<T>(endPoint : string, body: any, params: HttpParams = new HttpParams()): Observable<T>{
+    console.log('this.apiURL', this.apiURL);
+    
     return this.http.post<T>(`${this.apiURL}/${endPoint}`, body, {params});
   }
   public Delete<T>(endPoint : string): Observable<T>{

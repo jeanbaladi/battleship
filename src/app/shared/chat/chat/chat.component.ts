@@ -17,16 +17,14 @@ export class ChatComponent implements OnInit {
   public gameId: string = '';
   constructor(
     private _chatService: ChatService, 
-    private _router: Router,
     private _route: ActivatedRoute,
-    private _authService: AuthService
     ){}
 
   ngOnInit(): void {
     this.gameId = this._route.snapshot.paramMap.get('gameId') || '';
     if(this.gameId){
       this._chatService.startConnection('chat');
-      this._chatService.joinGroup(this.gameId);
+      this._chatService.AddToGroup(this._chatService.connection, this.gameId, this._chatService.currentUserDTO);
     }
   }
 

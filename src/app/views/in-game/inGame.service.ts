@@ -1,15 +1,13 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { boardsData, ships, shipsInBoard } from 'src/app/interfaces';
+import { Board, ResponseHTTP, boardsData, ships, shipsInBoard } from 'src/app/interfaces';
+import { ApiService } from 'src/app/services/api.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class InGameService {
-  // currentCellsSelected: Subject<Array<any>> = new Subject<Array<any>>();
-  // prevCellsSelected: Subject<Array<any>> = new Subject<Array<any>>();
-  // cellsSelected: Subject<Array<any>> = new Subject<Array<any>>();
-
+export class InGameService extends ApiService {
   public cellsSelected: Array<any> = [];
   private _currentShipSelected!: ships;
   private _currentShipSelectedInBoard!: shipsInBoard;
@@ -20,12 +18,48 @@ export class InGameService {
     {id:'3', url:"🚢", length:4, dir: 'y', coordinate: null, boatParts: ['🚢','🔲','🔲','💦']},
     {id:'4', url:"🚢", length:5, dir: 'y', coordinate: null, boatParts: ['🚢','🔲','🔲','🔲','💦']}
   ]);
-
   private _startGame: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private _shipsInBoard: Array<Array<boardsData>> = [];
 
-  private _shipsInBoard: Array<boardsData> = [];
+  //---shots board
 
-  constructor() { }
+
+  constructor(http: HttpClient) {
+    super(http);
+  }
+  // const reduce = tmp.reduce((a:Array<any>,c,i,arr) => {
+  //   if(Array.isArray(a)){
+  //       const aux = c.id;
+  //       a = [...a, {[aux]: c}]
+  //   }
+  //   return a;
+  // },[])
+  // public readyPlayer(newPlayer: Board): Observable<ResponseHTTP<string>> {;
+  public readyPlayer(newPlayer: Board): Observable<ResponseHTTP<string>> {;
+    const boardsData = newPlayer.boardsData;
+    let asd: any[] = [];
+    const fixObject = boardsData.forEach((x) => {
+      // console.log('fixObject', x);
+      x.forEach((j: any) => {
+        const objectName = Object.keys(j)[0]
+        const newName = 'id';
+        j[newName] = j[objectName];
+        delete j[objectName]['id']
+        delete j[objectName]['url']
+        delete j[objectName]['dir']
+        delete j[objectName]['idElement']
+        delete j[objectName]['status']
+        delete j[objectName]['_cellBackgroundColor']
+        delete j[objectName]['boatParts']
+        delete j[objectName];
+
+      })
+    });
+    // newPlayer.boardsData = asd;
+    console.log('fixObject', newPlayer);
+    // return new Observable;
+    return this.post<ResponseHTTP<string>>('Game', newPlayer);
+  }
 
   public preparedBoard(): Observable<boolean>{
     return this._startGame.asObservable();
@@ -36,9 +70,10 @@ export class InGameService {
     this._startGame.next(this.ships.length === 0 && this.shipsInBoard.length === 4);
   }
 
-  public set shipsInBoard(value : Array<any>){
+  public set shipsInBoard(value : Array<Array<boardsData>>){
     this._shipsInBoard = value;
   }
+
   public get shipsInBoard(){
     return this._shipsInBoard;
   }
@@ -78,15 +113,5 @@ export class InGameService {
   public handlerShips(): Observable<Array<ships>> {
     return this._ships.asObservable();
   }
-
-  // public watchCurrentCellsSelected(): Observable<Array<any>> {
-  //   return this.currentCellsSelected.asObservable();
-  // }
-  // public watchPrevCellsSelected(): Observable<Array<any>> {
-  //   return this.prevCellsSelected.asObservable();
-  // }
-  // public watchCellsSelected(): Observable<Array<any>> {
-  //   return this.cellsSelected.asObservable();
-  // }
 
 }
