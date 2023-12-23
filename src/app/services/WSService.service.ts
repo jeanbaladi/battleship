@@ -7,7 +7,7 @@ import * as signalR from '@microsoft/signalr';
 @Injectable({
   providedIn: 'root'
 })
-export abstract class MiddlewareService {
+export abstract class WSService {
   private _webSockecketUrl = environment.WebSocket;
 
   constructor() { }
@@ -25,6 +25,7 @@ export abstract class MiddlewareService {
       .then(() => {
         connection.invoke('AddToGroup',roonName, extras);
       })
+      .then((res) => console.log("WSS", res))
       .catch((e: any) => console.warn(e));
   }
 }

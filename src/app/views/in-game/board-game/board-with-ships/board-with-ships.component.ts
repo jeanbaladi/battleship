@@ -23,12 +23,14 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
   public startGame: boolean = false;
   public gameId: string = '';
   public room!: CreateGamingRoom;
+  public boardStatus: "editable" | "blocked" = 'editable';
   constructor(
     private _inGameService: InGameService,
     private _authService: AuthService,
     private _route: ActivatedRoute){}
 
   ngOnInit(): void {
+    this.boardStatus = this._inGameService.boardStatus;
     this.gameId = this._route.snapshot.paramMap.get('gameId') || '';
     this.room = {
       createdBy: this._route.snapshot.queryParams['createdBy'],
@@ -68,8 +70,7 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
   }
 
   readyPlayer() {
-    console.log('this._authService.currentUserDTO',this._authService.currentUserDTO);
-    
+    this.boardStatus = 'blocked'; 
     let newPlayer: Board = {
       boardsData: this._inGameService.shipsInBoard,
       profile: this._authService.currentUserDTO,
@@ -86,6 +87,7 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
    */
   @HostListener('window:wheel', ['$event']) 
   onScroll() {
+    if(this._inGameService.boardStatus == 'blocked') return;
     if(this._inGameService.currentShipSelected){
       this._inGameService.currentShipSelected.dir = 
         this._inGameService.currentShipSelected.dir == 'y' ? 'x' : 'y';
@@ -105,6 +107,7 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
   }
 
   dropped(event: any, mode: string) {
+    if(this._inGameService.boardStatus == 'blocked') return;
     if(!event) return;
     if(!event.item?.data) return;
     if(event.item?.data.boatParts.length == 0) return;
@@ -294,7 +297,8 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
         console.log('debugger',this.board);
       }
   }
-  test(cdkDragStart: CdkDragStart<shipsInBoard>){
+  moveShip(cdkDragStart: CdkDragStart<shipsInBoard>){
+    if(this._inGameService.boardStatus == 'blocked') return;
     if(cdkDragStart.source.data.length === 0) return;
     const index: number = Number(cdkDragStart.source.data.id);
     const length: number = Number(cdkDragStart.source.data.length);

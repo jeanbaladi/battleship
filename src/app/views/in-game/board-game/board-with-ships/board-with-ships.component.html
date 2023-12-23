@@ -8,9 +8,20 @@
             (cdkDropListEntered)="dropped($event, 'entered')" 
             (cdkDropListExited)="dropped($event, 'exited')"
             [id]="cell.idElement"
-            [ngStyle]="{'background-color': cell.cellBackgroundColor}"
+            [ngStyle]="{
+                'background-color': cell.cellBackgroundColor,
+                
+                'cursor': boardStatus == 'editable' ? 'pointer' : 'default' 
+            }"
         >
-            <div style="height: 100%;width: 100%;" cdkDrag (cdkDragStarted)="test($event)"  [cdkDragData]="cell">{{cell.idElement}}</div>
+            <div 
+                style="height: 100%;width: 100%;" 
+                cdkDrag 
+                (cdkDragStarted)="moveShip($event)"  
+                [cdkDragData]="cell"
+            >
+                {{cell.idElement}}
+            </div>
         </div>
     </div>
     <button 

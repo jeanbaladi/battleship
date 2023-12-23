@@ -83,10 +83,6 @@ export class ChatContentComponent implements OnInit {
   }
 
   sendMsg(){
-    // console.log('chatContentMessages',chatContentMessages.scrollHeight);
-    // console.log('chatContentMessages',chatContentMessages.offsetHeight);
-    
-    // chatContentMessages.scrollTo(0,chatContentMessages.scrollHeight)
     const value: MsgDTO = {message: this.formMsg.get('msg')?.value.replaceAll("  ", "")};
     this.formMsg.reset();
     if(!!value.message && value.message !== ' '){

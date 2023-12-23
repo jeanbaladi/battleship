@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { MsgDTO, userDTO } from 'src/app/interfaces';
 import { ApiService } from 'src/app/services/api.service';
-import { MiddlewareService } from 'src/app/services/middleware.service';
+import { WSService } from 'src/app/services/WSService.service';
 import { AuthService } from 'src/app/views/auth/auth.service';
 import { environment } from 'src/environments/environments';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService extends MiddlewareService{
+export class ChatService extends WSService{
   webSockecketUrl = environment.WebSocket;
   private _connection!: signalR.HubConnection;
   private _currentUserDTO!: userDTO;

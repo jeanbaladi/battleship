@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Board, ResponseHTTP, boardsData, ships, shipsInBoard } from 'src/app/interfaces';
+import { Board, ResponseHTTP, boardsData, coordinate, ships, shipsInBoard, userDTO } from 'src/app/interfaces';
 import { ApiService } from 'src/app/services/api.service';
 
 @Injectable({
@@ -20,25 +20,22 @@ export class InGameService extends ApiService {
   ]);
   private _startGame: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private _shipsInBoard: Array<Array<boardsData>> = [];
+  private _boardStatus: 'editable' | 'blocked' = 'editable'
 
   //---shots board
 
-
+  //--oponente
+  private _opponent!: userDTO;
+  
   constructor(http: HttpClient) {
     super(http);
   }
-  // const reduce = tmp.reduce((a:Array<any>,c,i,arr) => {
-  //   if(Array.isArray(a)){
-  //       const aux = c.id;
-  //       a = [...a, {[aux]: c}]
-  //   }
-  //   return a;
-  // },[])
-  // public readyPlayer(newPlayer: Board): Observable<ResponseHTTP<string>> {;
-  public readyPlayer(newPlayer: Board): Observable<ResponseHTTP<string>> {;
-    const boardsData = newPlayer.boardsData;
+
+  public readyPlayer(newPlayer: Board): Observable<ResponseHTTP<string>> {
+    this._boardStatus = 'blocked';
+    const boardsData =JSON.parse(JSON.stringify(newPlayer.boardsData));
     let asd: any[] = [];
-    const fixObject = boardsData.forEach((x) => {
+    const fixObject = boardsData.forEach((x: Array<shipsInBoard>) => {
       // console.log('fixObject', x);
       x.forEach((j: any) => {
         const objectName = Object.keys(j)[0]
@@ -68,6 +65,33 @@ export class InGameService extends ApiService {
   public startGame() {
     console.log(this.ships.length === 0 && this.shipsInBoard.length === 4);
     this._startGame.next(this.ships.length === 0 && this.shipsInBoard.length === 4);
+  }
+
+  shoot(
+    room: string, 
+    coordinate: coordinate,
+    // identityIduserAttacked: string,
+    userAttacking: userDTO, 
+    connection: signalR.HubConnection
+  ){
+    connection.invoke('Shoot', 
+      room,
+      coordinate,
+      // identityIduserAttacked,
+      userAttacking).catch(() => {
+        console.warn('error in websokect');
+      });
+  }
+
+  public get boardStatus(): "editable" | "blocked"{
+    return this._boardStatus;
+  }
+  public get opponent(): userDTO{
+    return this._opponent;
+  }
+  
+  public set opponent(opponent: userDTO){
+    this._opponent = opponent;
   }
 
   public set shipsInBoard(value : Array<Array<boardsData>>){

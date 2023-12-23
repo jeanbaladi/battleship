@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
 import { InGameService } from '../../inGame.service';
+import { ResponseHTTP, coordinate, userDTO } from 'src/app/interfaces';
+import { AuthService } from 'src/app/views/auth/auth.service';
+import { ActivatedRoute } from '@angular/router';
+import { ChatService } from 'src/app/shared/chat/Chat.service';
 
 @Component({
-  selector: 'app-shots-board',
+  selector: 'app-shoots-board',
   templateUrl: './shots-board.component.html',
   styleUrls: ['./shots-board.component.scss']
 })
-export class ShotsBoardComponent {
+export class ShootsBoardComponent {
   private rows: number = 10;
   private col: number = 10;
   public board: Array<Array<any>> = [];
@@ -14,7 +18,12 @@ export class ShotsBoardComponent {
   public lastSelectection: Array<(HTMLElement | null)> = [];
   public repositionShip: Array<any> = [];
 
-  constructor(private _inGameService: InGameService){}
+  constructor(
+    private _inGameService: InGameService,
+    private _authService: AuthService,
+    private ActivatedRoute: ActivatedRoute,
+    private _chatService: ChatService,
+  ){}
 
   ngOnInit(): void {
     let tmp = 0;
@@ -33,5 +42,35 @@ export class ShotsBoardComponent {
         this.board[i].push(aux);
       }
     }
+
+    this._chatService.connection.on('shoot', (response: ResponseHTTP<string>, attackIsSuccessful, userAttacking) => {
+      if(response.isSuccess){
+        if(response.result != ""){
+          alert(response.result);
+        }else{
+          console.log('shoot',attackIsSuccessful, userAttacking);
+        }
+      }else{
+        console.warn('shoot', response.result);
+        
+      }
+    })
+  }
+  shoot(coord: string, element: HTMLDivElement){
+    console.log('shoot',coord);
+    console.log('element',element);
+    element.style.backgroundColor = "#f987ba";
+    const roomId: string = this.ActivatedRoute.snapshot.paramMap.get('gameId') || '';
+    const coordinate: coordinate = {x: coord[0], y: coord[2]};
+    // const identityIduserAttacked: string = this._inGameService.opponent.identityId;
+    const userAttacking: userDTO = this._chatService.currentUserDTO;
+    this._inGameService.shoot(
+      roomId,
+      coordinate,
+      // identityIduserAttacked,
+      userAttacking,
+      this._chatService.connection
+    );
+    // Shot(string room, Coordinate coordinate,string identityIduserAttacked, UserDTO userAttacking )
   }
 }

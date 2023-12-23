@@ -5,7 +5,11 @@
             *ngFor="let cell of row"
             [ngStyle]="{'background-color': cell.cellBackgroundColor}"
         >
-            <div style="height: 100%;width: 100%;" ></div>
+            <div 
+                #cellDiv
+                style="height: 100%;width: 100%;"
+                (click)="shoot(cell.idElement,cellDiv)"
+            ></div>
         </div>
     </div>
 </div>
