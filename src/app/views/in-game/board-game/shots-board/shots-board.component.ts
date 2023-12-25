@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/views/auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { ChatService } from 'src/app/shared/chat/Chat.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from 'src/app/services/notifications/notification.service';
 
 @Component({
   selector: 'app-shoots-board',
@@ -24,7 +25,7 @@ export class ShootsBoardComponent {
     private _authService: AuthService,
     private ActivatedRoute: ActivatedRoute,
     private _chatService: ChatService,
-    private _snackBar: MatSnackBar
+    private _notificationService: NotificationService,
   ){}
 
   ngOnInit(): void {
@@ -47,11 +48,7 @@ export class ShootsBoardComponent {
       this._chatService.connection.on("NotifyUserReady", (user: userDTO) => {
         const msg: string = `
           ${user.identityId !== this._chatService.currentUserDTO.identityId ? user.userName + ' is ready' : 'you are ready'} `;
-        this._snackBar.open(`${msg} `, 'close', {
-          duration: 4 * 1000,
-          verticalPosition: 'top',
-          horizontalPosition: 'start'
-        });
+          this._notificationService.showNotification(msg);
       });
     }
 

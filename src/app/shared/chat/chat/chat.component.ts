@@ -8,7 +8,7 @@ import { userDTO } from 'src/app/interfaces';
 import { mapper } from 'src/app/utils/mapper';
 import { InGameService } from 'src/app/views/in-game/inGame.service';
 import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-import { NotificationComponent } from '../../notification/notification.component';
+import { NotificationService } from 'src/app/services/notifications/notification.service';
 
 @Component({
   selector: 'app-chat',
@@ -23,7 +23,7 @@ export class ChatComponent implements OnInit {
     private _route: ActivatedRoute,
     private _authService: AuthService,
     private _inGameService: InGameService,
-    private _snackBar: MatSnackBar
+    private _notificationService: NotificationService
     ){}
 
   ngOnInit(): void {
@@ -32,16 +32,9 @@ export class ChatComponent implements OnInit {
       this.chatService.startConnection('gameHub');
       this.chatService.AddToGroup(this.chatService.connection, this.chatService.roomId, this.chatService.currentUserDTO);
       this.chatService.connection.on('UserAdded', (notification: string, user: userDTO) => {
-        console.log("WSS", user.userName);
-        console.log("WSS", this._authService.currentUserDTO.identityId);
-        console.log("WSS", user);
         
         if(user.identityId !== this.chatService.currentUserDTO.identityId){
-          this._snackBar.open(`${user.userName} has joined`, 'close', {
-            duration: 4 * 1000,
-            verticalPosition: 'top',
-            horizontalPosition: 'start'
-          });
+          this._notificationService.showNotification(`${user.userName} has joined`);
         }
 
         if(user.identityId !== this._authService.currentUserDTO.identityId){

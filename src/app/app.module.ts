@@ -10,6 +10,8 @@ import { NavBarComponent } from './shared/nav-bar/nav-bar-component/nav-bar.comp
 import { NavBarService } from './shared/nav-bar/nav-bar.service';
 import { MaterialModule } from './shared';
 import { ItemsComponent } from './shared/nav-bar/items/items.component';
+import { ChatService } from './shared/chat/Chat.service';
+import { NotificationService } from './services/notifications/notification.service';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { ItemsComponent } from './shared/nav-bar/items/items.component';
   providers: [
     provideAnimations(),
     AuthService,
+    ChatService,
+    NotificationService,
     NavBarService,
     {
       provide: HTTP_INTERCEPTORS,

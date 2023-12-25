@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/views/auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ChatService } from 'src/app/shared/chat/Chat.service';
+import { NotificationService } from 'src/app/services/notifications/notification.service';
 
 @Component({
   selector: 'app-board-with-ships',
@@ -30,7 +31,7 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
     private _inGameService: InGameService,
     private _authService: AuthService,
     private _route: ActivatedRoute,
-    private _snackBar: MatSnackBar,
+    private _notificationService: NotificationService,
     private _chatService: ChatService
   ){}
 
@@ -87,12 +88,7 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
         this._chatService.connection.invoke('ReadyPlayer',this._chatService.roomId ,this._chatService.currentUserDTO).catch(() => {
           console.warn('WSS','error in webcokect');
         });
-
-        this._snackBar.open(`${response.result}`, 'close', {
-          duration: 4 * 1000,
-          verticalPosition: 'top',
-          horizontalPosition: 'start'
-        });
+        this._notificationService.showNotification(response.result);
       }else{
 
       }
