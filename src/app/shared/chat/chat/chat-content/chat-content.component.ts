@@ -43,8 +43,9 @@ export class ChatContentComponent implements OnInit {
       msg: new FormControl('')
     });
 
+    // this._chatService.connection.on('ReceiveMessage', (user: userDTO, msg: MsgDTO) => {
     this._chatService.connection.on('ReceiveMessage', (user: userDTO, msg: MsgDTO) => {
-      console.log(msg.message);
+      console.log('WSS',msg.message);
       
       
       const itsMyMsg = user.identityId === this._chatService.currentUserDTO.identityId;
@@ -78,7 +79,7 @@ export class ChatContentComponent implements OnInit {
           })
         }
         console.log('chatContentMessages', this.chatContentMessages);
-        // console.log('chatContentMessages', this.chatContentMessages.scrollHeight);
+        console.log('chatContentMessages', this.chatContentMessages.scrollHeight);
     })
   }
 

@@ -15,7 +15,7 @@ import { ItemsComponent } from './shared/nav-bar/items/items.component';
   declarations: [
     AppComponent,
     NavBarComponent,
-    ItemsComponent
+    ItemsComponent,
   ],
   imports: [
     AppRoutingModule,

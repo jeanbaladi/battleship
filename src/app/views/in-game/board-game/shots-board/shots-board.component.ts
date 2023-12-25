@@ -4,6 +4,7 @@ import { ResponseHTTP, coordinate, userDTO } from 'src/app/interfaces';
 import { AuthService } from 'src/app/views/auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { ChatService } from 'src/app/shared/chat/Chat.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-shoots-board',
@@ -23,6 +24,7 @@ export class ShootsBoardComponent {
     private _authService: AuthService,
     private ActivatedRoute: ActivatedRoute,
     private _chatService: ChatService,
+    private _snackBar: MatSnackBar
   ){}
 
   ngOnInit(): void {
@@ -41,6 +43,16 @@ export class ShootsBoardComponent {
           aux.url = "",
         this.board[i].push(aux);
       }
+
+      this._chatService.connection.on("NotifyUserReady", (user: userDTO) => {
+        const msg: string = `
+          ${user.identityId !== this._chatService.currentUserDTO.identityId ? user.userName + ' is ready' : 'you are ready'} `;
+        this._snackBar.open(`${msg} `, 'close', {
+          duration: 4 * 1000,
+          verticalPosition: 'top',
+          horizontalPosition: 'start'
+        });
+      });
     }
 
     this._chatService.connection.on('shoot', (response: ResponseHTTP<string>, attackIsSuccessful, userAttacking) => {

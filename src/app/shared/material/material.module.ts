@@ -6,6 +6,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatMenuModule} from '@angular/material/menu';
 import {CdkDrag, DragDropModule} from '@angular/cdk/drag-drop';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   imports: [CdkDrag],
@@ -16,7 +17,8 @@ import {CdkDrag, DragDropModule} from '@angular/cdk/drag-drop';
     MatIconModule,
     MatSidenavModule,
     MatMenuModule,
-    DragDropModule
+    DragDropModule,
+    MatSnackBarModule
   ]
 })
 export class MaterialModule { }

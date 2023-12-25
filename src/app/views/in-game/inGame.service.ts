@@ -35,7 +35,7 @@ export class InGameService extends ApiService {
     this._boardStatus = 'blocked';
     const boardsData =JSON.parse(JSON.stringify(newPlayer.boardsData));
     let asd: any[] = [];
-    const fixObject = boardsData.forEach((x: Array<shipsInBoard>) => {
+    boardsData.forEach((x: Array<shipsInBoard>) => {
       // console.log('fixObject', x);
       x.forEach((j: any) => {
         const objectName = Object.keys(j)[0]
@@ -52,7 +52,8 @@ export class InGameService extends ApiService {
 
       })
     });
-    // newPlayer.boardsData = asd;
+    newPlayer.boardsData = boardsData;
+    console.log('fixObject', boardsData);
     console.log('fixObject', newPlayer);
     // return new Observable;
     return this.post<ResponseHTTP<string>>('Game', newPlayer);

@@ -9,7 +9,7 @@ import { BrowserModule } from '@angular/platform-browser';
 @NgModule({
   declarations: [
     ChatComponent,
-    ChatContentComponent
+    ChatContentComponent,
   ],
   exports: [
     ChatComponent

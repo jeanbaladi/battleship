@@ -14,6 +14,7 @@ export class ChatService extends WSService{
   webSockecketUrl = environment.WebSocket;
   private _connection!: signalR.HubConnection;
   private _currentUserDTO!: userDTO;
+  private _roomId: string = '';
 
   constructor(private _authService: AuthService) {
     super()
@@ -32,9 +33,18 @@ export class ChatService extends WSService{
     console.log(this._currentUserDTO);
     
     this.connection.invoke('SendMssage', roonName, msg, this._currentUserDTO).catch(() => {
-      console.warn('error in webcokect');
+      console.warn('WSS','error in webcokect');
     });
   }
+
+  public get roomId(): string {
+    return this._roomId;
+  }
+
+  public set roomId(value: string) {
+    this._roomId = value;
+  }
+
 
   public get connection(): signalR.HubConnection{
     return this._connection;

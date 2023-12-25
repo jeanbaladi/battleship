@@ -5,6 +5,8 @@ import { InGameService } from '../../inGame.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/views/auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ChatService } from 'src/app/shared/chat/Chat.service';
 
 @Component({
   selector: 'app-board-with-ships',
@@ -27,7 +29,10 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
   constructor(
     private _inGameService: InGameService,
     private _authService: AuthService,
-    private _route: ActivatedRoute){}
+    private _route: ActivatedRoute,
+    private _snackBar: MatSnackBar,
+    private _chatService: ChatService
+  ){}
 
   ngOnInit(): void {
     this.boardStatus = this._inGameService.boardStatus;
@@ -77,7 +82,20 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
       room: this.room
     }
     this._inGameService.readyPlayer(newPlayer).subscribe((response) => {
-      console.log('response', response);
+      if(response.isSuccess){
+
+        this._chatService.connection.invoke('ReadyPlayer',this._chatService.roomId ,this._chatService.currentUserDTO).catch(() => {
+          console.warn('WSS','error in webcokect');
+        });
+
+        this._snackBar.open(`${response.result}`, 'close', {
+          duration: 4 * 1000,
+          verticalPosition: 'top',
+          horizontalPosition: 'start'
+        });
+      }else{
+
+      }
       
     })
   }
