@@ -19,7 +19,7 @@ export class ShootsBoardComponent {
   public aux: any;
   public lastSelectection: Array<(HTMLElement | null)> = [];
   public repositionShip: Array<any> = [];
-
+  private _element: HTMLDivElement | null = null;
   constructor(
     private _inGameService: InGameService,
     private _authService: AuthService,
@@ -57,18 +57,24 @@ export class ShootsBoardComponent {
         if(response.result != ""){
           alert(response.result);
         }else{
+          if(this._element !== null){
+            this._element.style.backgroundColor = "#1D1C1A";
+          }
+          console.log('shoot',response);
           console.log('shoot',attackIsSuccessful, userAttacking);
         }
       }else{
-        console.warn('shoot', response.result);
-        
+        this._element = null;
+        if(userAttacking.identityId === this._chatService.currentUserDTO.identityId){
+          this._notificationService.showNotification(response.result);
+        }
       }
     })
   }
   shoot(coord: string, element: HTMLDivElement){
     console.log('shoot',coord);
     console.log('element',element);
-    element.style.backgroundColor = "#f987ba";
+    this._element = element;
     const roomId: string = this.ActivatedRoute.snapshot.paramMap.get('gameId') || '';
     const coordinate: coordinate = {x: coord[0], y: coord[2]};
     // const identityIduserAttacked: string = this._inGameService.opponent.identityId;

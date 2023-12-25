@@ -3,10 +3,6 @@ import { ChangeDetectionStrategy, Component, ElementRef, HostListener, NgZone, O
 import { ships, shipsInBoard } from 'src/app/interfaces';
 import { InGameService } from '../inGame.service';
 
-// const INITIAL_VALUE: shipsInBoard = {
-
-// }
-
 @Component({
   selector: 'app-board-game',
   templateUrl: './board-game.component.html',
