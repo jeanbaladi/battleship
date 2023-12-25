@@ -36,6 +36,7 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
   ){}
 
   ngOnInit(): void {
+    this.createBoard();
     this.boardStatus = this._inGameService.boardStatus;
     this.gameId = this._route.snapshot.paramMap.get('gameId') || '';
     this.room = {
@@ -45,6 +46,30 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
     }
     this._route.data.subscribe(res => console.log('response', res))
     let tmp = 0;
+
+    this._inGameService.startGame();
+    this._subscriptions$.push(
+      this._inGameService.preparedBoard().subscribe((response: boolean) => {
+        this.startGame = response;
+      })
+    );
+    
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions$.forEach((sub) => {
+      sub.unsubscribe();
+    })
+  }
+
+  refreshBoard() {
+    this._inGameService.refreshBoard();
+    this._inGameService.startGame();
+    this.createBoard();
+  }
+
+  createBoard(){
+    this.board = [[]];
     for (let i = 0; i < this.rows; i++) {
       this.board.push([]);
       for (let j = 0; j < this.col; j++) {
@@ -60,19 +85,6 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
         this.board[i].push(aux);
       }
     }
-
-    this._subscriptions$.push(
-      this._inGameService.preparedBoard().subscribe((response: boolean) => {
-        this.startGame = response;
-      })
-    );
-    
-  }
-
-  ngOnDestroy(): void {
-    this._subscriptions$.forEach((sub) => {
-      sub.unsubscribe();
-    })
   }
 
   readyPlayer() {

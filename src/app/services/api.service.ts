@@ -58,8 +58,8 @@ export abstract class ApiService {
     
     return this.http.post<T>(`${this.apiURL}/${endPoint}`, body, {params});
   }
-  public Delete<T>(endPoint : string): Observable<T>{
-    return this.http.delete<T>(`${this.apiURL}/${endPoint}`);
+  public Delete<T>(endPoint : string, id: string): Observable<T>{
+    return this.http.delete<T>(`${this.apiURL}/${endPoint}/${id}`);
   }
 
 }

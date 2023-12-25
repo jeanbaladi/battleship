@@ -12,6 +12,7 @@ export class InGameService extends ApiService {
   private _currentShipSelected!: ships;
   private _currentShipSelectedInBoard!: shipsInBoard;
   private _currentShipElementSelected!: HTMLDivElement;
+  private _constShips!: Array<ships>;
   private _ships: BehaviorSubject<Array<ships>> = new BehaviorSubject<Array<ships>>([
     {id:'1', url:"🚢", length:2, dir: 'y', coordinate: null, boatParts: ['🚢','💦']},
     {id:'2', url:"🚢", length:3, dir: 'y', coordinate: null, boatParts: ['🚢','🔲','💦']},
@@ -29,6 +30,7 @@ export class InGameService extends ApiService {
   
   constructor(http: HttpClient) {
     super(http);
+    this._constShips = JSON.parse(JSON.stringify(this._ships.getValue()));
   }
 
   public readyPlayer(newPlayer: Board): Observable<ResponseHTTP<string>> {
@@ -64,11 +66,17 @@ export class InGameService extends ApiService {
   }
 
   public startGame() {
-    console.log(this.ships.length === 0 && this.shipsInBoard.length === 4);
+    console.log('startGame',this.ships.length );
+    console.log('startGame',this.shipsInBoard.length);
     this._startGame.next(this.ships.length === 0 && this.shipsInBoard.length === 4);
   }
 
-  shoot(
+  public refreshBoard(){
+    this._ships.next(JSON.parse(JSON.stringify(this._constShips)));
+    this.shipsInBoard = [];
+  }
+
+  public shoot(
     room: string, 
     coordinate: coordinate,
     // identityIduserAttacked: string,
@@ -84,9 +92,18 @@ export class InGameService extends ApiService {
       });
   }
 
+  public leaveTheGame(id: string): Observable<string>{
+    return this.Delete<string>('Game/player',id);
+  }
+
+  public get constShips(): Array<ships>{
+    return this._constShips;
+  }
+
   public get boardStatus(): "editable" | "blocked"{
     return this._boardStatus;
   }
+
   public get opponent(): userDTO{
     return this._opponent;
   }

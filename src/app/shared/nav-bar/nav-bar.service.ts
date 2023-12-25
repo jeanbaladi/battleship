@@ -8,7 +8,7 @@ import { PathsService } from 'src/app/services/paths.service';
 })
 export class NavBarService extends PathsService {
 
-  constructor(router: Router,) { 
+  constructor(router: Router) { 
     super(router);
   }
 

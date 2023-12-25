@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { navbarElements } from '../interfaces';
 import { NavigationEnd, Router, Event } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
+import { InGameService } from '../views/in-game/inGame.service';
+import { ChatService } from '../shared/chat/Chat.service';
 
 @Injectable({
   providedIn: 'root'
