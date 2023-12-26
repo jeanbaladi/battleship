@@ -81,6 +81,7 @@ export class ChatContentComponent implements OnInit {
         console.log('chatContentMessages', this.chatContentMessages);
         console.log('chatContentMessages', this.chatContentMessages.scrollHeight);
     })
+    this._chatService.addMetHods('ReceiveMessage');
   }
 
   sendMsg(){

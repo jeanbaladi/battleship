@@ -40,8 +40,14 @@ export class ChatComponent implements OnInit {
         if(user.identityId !== this._authService.currentUserDTO.identityId){
           this._inGameService.opponent = user;
         }
-        
       });
+
+      this.chatService.connection.on('NotifyPlayerLeft', (user: userDTO) => {
+        if(this.chatService.currentUserDTO.identityId !== user.identityId){
+          this._notificationService.showNotification(`${user.userName} left the room`);
+        }
+      });
+      this.chatService.addMetHods('UserAdded','NotifyPlayerLeft');
     }
   }
 

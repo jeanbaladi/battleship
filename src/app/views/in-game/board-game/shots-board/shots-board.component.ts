@@ -50,6 +50,7 @@ export class ShootsBoardComponent {
           ${user.identityId !== this._chatService.currentUserDTO.identityId ? user.userName + ' is ready' : 'you are ready'} `;
           this._notificationService.showNotification(msg);
       });
+      this._chatService.addMetHods('NotifyUserReady');
     }
 
     this._chatService.connection.on('shoot', (response: ResponseHTTP<string>, attackIsSuccessful, userAttacking) => {
@@ -69,7 +70,8 @@ export class ShootsBoardComponent {
           this._notificationService.showNotification(response.result);
         }
       }
-    })
+    });
+    this._chatService.addMetHods('shoot');
   }
   shoot(coord: string, element: HTMLDivElement){
     console.log('shoot',coord);

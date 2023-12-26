@@ -15,7 +15,7 @@ export class ChatService extends WSService{
   private _connection!: signalR.HubConnection;
   private _currentUserDTO!: userDTO;
   private _roomId: string = '';
-
+  private _metHodsNames: Array<string> = [];
   constructor(private _authService: AuthService) {
     super()
   }
@@ -34,6 +34,29 @@ export class ChatService extends WSService{
     
     this.connection.invoke('SendMssage', roonName, msg, this._currentUserDTO).catch(() => {
       console.warn('WSS','error in webcokect');
+    });
+  }
+
+  public get metHods(): Array<string> {
+    return this._metHodsNames;
+  }
+
+  public addMetHods(...value: Array<string>) {
+    value.forEach((method) => {
+      this._metHodsNames.push(method);
+    })
+  }
+  public removeAllMetHods() {
+    this._metHodsNames = [];
+  }
+  public removeAMetHods(metHodName: string) {
+    const index = this._metHodsNames.indexOf(metHodName);
+    this._metHodsNames.splice(index, 1);
+  }
+
+  public disconnectAllConection(){
+    this._metHodsNames.forEach((method) => {
+      this.connection.off(method);
     });
   }
 

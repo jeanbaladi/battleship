@@ -92,6 +92,14 @@ export class InGameService extends ApiService {
       });
   }
 
+  public playerLeft(room: string, user: userDTO, connection: signalR.HubConnection){
+    connection.invoke('PlayerLeft', 
+    room,
+    user).catch(() => {
+      console.warn('error in websokect');
+    });
+  }
+
   public leaveTheGame(id: string): Observable<string>{
     return this.Delete<string>('Game/player',id);
   }
