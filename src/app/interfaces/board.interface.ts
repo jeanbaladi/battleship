@@ -16,14 +16,14 @@ export interface boardsData {
 }
 
 export class shipsInBoard implements ships {
-    public id: string = '';
+        public id: string = '';
     public length: number = 0;
     public url: string = '';
     public dir: "y" | "x" = 'y';
     public coordinate: coordinate[] | null  = null;
     public boatParts: string[] = [];
     public idElement : string = '';
-    public status:  'ocuped' | 'empty' |  'hover' | 'wrong' = 'empty'
+    public status:  'ocuped' | 'empty' |  'hover' | 'wrong' | 'attacked' = 'empty'
     private _cellBackgroundColor: string = '';
 
     constructor(){
@@ -34,7 +34,7 @@ export class shipsInBoard implements ships {
         return this.addCellBackgroundColor(this.status);
     }
 
-    private addCellBackgroundColor(status:'ocuped' | 'empty' | 'hover' | 'wrong'): string {
+    private addCellBackgroundColor(status:'ocuped' | 'empty' | 'hover' | 'wrong' | 'attacked'): string {
         switch(status){
             case 'empty':
                 return '#8ACDD7'
@@ -44,6 +44,8 @@ export class shipsInBoard implements ships {
                 return '#93414e'
             case 'ocuped':
                 return '#f987ba'
+            case 'attacked':
+                return '#93414e'
             
         }
     }

@@ -19,6 +19,7 @@
                 cdkDrag 
                 (cdkDragStarted)="moveShip($event)"  
                 [cdkDragData]="cell"
+                [class]="cell.status"
             >
                 {{cell.idElement}}
             </div>
@@ -36,5 +37,11 @@
         (click)="refreshBoard()"
     >
         refresh board
+    </button>
+    <button 
+        mat-raised-button color="accent"
+        (click)="DeleteRoom()"
+    >
+        DELETE GAME
     </button>
 </div>

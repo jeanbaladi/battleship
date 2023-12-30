@@ -53,16 +53,26 @@ export class ShootsBoardComponent {
       this._chatService.addMetHods('NotifyUserReady');
     }
 
-    this._chatService.connection.on('shoot', (response: ResponseHTTP<string>, attackIsSuccessful, userAttacking) => {
+    this._chatService.connection.on('shoot', (response: ResponseHTTP<string>, attackIsSuccessful, userAttacking: userDTO) => {
       if(response.isSuccess){
         if(response.result != ""){
           alert(response.result);
         }else{
-          if(this._element !== null){
-            this._element.style.backgroundColor = "#1D1C1A";
+          const cloneBoard = this._inGameService.boardInPlay;
+          //Soy yo quien ataca
+          if(userAttacking.identityId === this._chatService.currentUserDTO.identityId){
+            if(this._element !== null){
+              if(attackIsSuccessful.successful){
+                this._element.style.backgroundColor = '#0e836a';
+              }else{
+                this._element.style.backgroundColor = "#1D1C1A";
+              }
+            }
+          }else{
+            //El contricante ataca
+            cloneBoard[attackIsSuccessful.coordinate.x][attackIsSuccessful.coordinate.y].status = 'attacked';
+            this._inGameService.boardInPlay = cloneBoard;
           }
-          console.log('shoot',response);
-          console.log('shoot',attackIsSuccessful, userAttacking);
         }
       }else{
         this._element = null;
@@ -74,8 +84,6 @@ export class ShootsBoardComponent {
     this._chatService.addMetHods('shoot');
   }
   shoot(coord: string, element: HTMLDivElement){
-    console.log('shoot',coord);
-    console.log('element',element);
     this._element = element;
     const roomId: string = this.ActivatedRoute.snapshot.paramMap.get('gameId') || '';
     const coordinate: coordinate = {x: coord[0], y: coord[2]};

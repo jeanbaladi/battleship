@@ -1,5 +1,5 @@
 import { CdkDragStart } from '@angular/cdk/drag-drop';
-import { ChangeDetectionStrategy, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Board, CreateGamingRoom, ships, shipsInBoard } from 'src/app/interfaces';
 import { InGameService } from '../../inGame.service';
 import { Subscription } from 'rxjs';
@@ -32,7 +32,8 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
     private _authService: AuthService,
     private _route: ActivatedRoute,
     private _notificationService: NotificationService,
-    private _chatService: ChatService
+    private _chatService: ChatService,
+    private _changeDetectorRef : ChangeDetectorRef
   ){}
 
   ngOnInit(): void {
@@ -96,11 +97,17 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
     }
     this._inGameService.readyPlayer(newPlayer).subscribe((response) => {
       if(response.isSuccess){
-
+        this._inGameService.boardInPlay = this.board;
         this._chatService.connection.invoke('ReadyPlayer',this._chatService.roomId ,this._chatService.currentUserDTO).catch(() => {
           console.warn('WSS','error in webcokect');
         });
         this._notificationService.showNotification(response.result);
+        this._subscriptions$.push(
+          this._inGameService.watchBoardInGame().subscribe((board: Array<Array<shipsInBoard>>) => {
+            this.board = board;
+            this._changeDetectorRef.detectChanges();
+          })
+        );
       }else{
 
       }
@@ -332,5 +339,9 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
     const findIdxInService = this._inGameService.shipsInBoard.filter(x => x.length === length)[0];
     this._inGameService.currentShipSelected = cdkDragStart.source.data;
     this.repositionShip = findIdxInService;
+  }
+
+  DeleteRoom(){
+    this._inGameService.DeleteRoom(this._chatService.roomId).subscribe();
   }
 }

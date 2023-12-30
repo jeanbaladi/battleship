@@ -22,7 +22,7 @@ export class InGameService extends ApiService {
   private _startGame: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private _shipsInBoard: Array<Array<boardsData>> = [];
   private _boardStatus: 'editable' | 'blocked' = 'editable'
-
+  private _boardInPlay: BehaviorSubject<Array<Array<shipsInBoard>>> = new BehaviorSubject<Array<Array<shipsInBoard>>>([]);
   //---shots board
 
   //--oponente
@@ -31,6 +31,18 @@ export class InGameService extends ApiService {
   constructor(http: HttpClient) {
     super(http);
     this._constShips = JSON.parse(JSON.stringify(this._ships.getValue()));
+  }
+
+  public get boardInPlay(){
+    return this._boardInPlay.getValue();;
+  }
+
+  public set boardInPlay(value: Array<Array<shipsInBoard>>){
+    this._boardInPlay.next(value);
+  }
+
+  public watchBoardInGame(): Observable<Array<Array<shipsInBoard>>> {
+    return this._boardInPlay.asObservable();
   }
 
   public readyPlayer(newPlayer: Board): Observable<ResponseHTTP<string>> {
@@ -55,8 +67,6 @@ export class InGameService extends ApiService {
       })
     });
     newPlayer.boardsData = boardsData;
-    console.log('fixObject', boardsData);
-    console.log('fixObject', newPlayer);
     // return new Observable;
     return this.post<ResponseHTTP<string>>('Game', newPlayer);
   }
@@ -74,6 +84,10 @@ export class InGameService extends ApiService {
   public refreshBoard(){
     this._ships.next(JSON.parse(JSON.stringify(this._constShips)));
     this.shipsInBoard = [];
+  }
+
+  public DeleteRoom(idRoom: string){
+    return this.Delete('room', idRoom);
   }
 
   public shoot(

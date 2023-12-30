@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    apiUrl: 'https://localhost:7207/api',
-    WebSocket: 'https://localhost:7207',
+    apiUrl: 'http://localhost:5212/api',
+    WebSocket: 'http://localhost:5212',
     // otras variables de entorno para desarrollo
   };
