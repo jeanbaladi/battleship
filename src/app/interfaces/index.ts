@@ -5,3 +5,4 @@ export * from './ResponseHTTP';
 export * from './lobby.interface';
 export * from './chatHub.interface';
 export * from './board.interface';
+export * from './profile.interface';

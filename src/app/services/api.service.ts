@@ -9,15 +9,22 @@ const INITIAL_VALUE : Auth = {
     expiration: new Date(),
     token: null
   },
-  profile: {
-    id: 0,
-    identityId: '',
+  user: {
+    accessFailedCount: 0,
+    concurrencyStamp: '',
+    email: '',
+    emailConfirmed: false,
+    id: '',
+    lockoutEnabled: false,
+    lockoutEnd: null,
+    normalizedEmail: '',
+    normalizedUserName: '',
+    passwordHash: '',
+    phoneNumber: '',
+    phoneNumberConfirmed: false,
+    securityStamp: '',
+    twoFactorEnabled: false,
     userName: '',
-    address: '',
-    battlesWin: 0,
-    battlesLose: 0,
-    totalBattlesPlayed: 0,
-    elo: 0,
   }
 }
 
@@ -25,7 +32,7 @@ const INITIAL_VALUE : Auth = {
   providedIn: 'root'
 })
 export abstract class ApiService {
-  private _currentUser : Auth = INITIAL_VALUE;
+  private _authInfo : Auth = INITIAL_VALUE;
   private _apiURL = environment.apiUrl;
 
   constructor(public http: HttpClient) { }
@@ -34,20 +41,20 @@ export abstract class ApiService {
     return this._apiURL;
   }
 
-  public get currentUser(): Auth{
-    return this._currentUser;
+  public get authInfo(): Auth{
+    return this._authInfo;
   }
 
-  public set currentUser(user: Auth) {
-    this._currentUser = user;
+  public set authInfo(user: Auth) {
+    this._authInfo = user;
   }
 
   public setCurrentToken(token: string | null) {
-    this._currentUser.authenticationResponse.token = token;
+    this._authInfo.authenticationResponse.token = token;
   }
 
   public get currentToken(): string {
-    return this._currentUser.authenticationResponse.token as string;
+    return this._authInfo.authenticationResponse.token as string;
   }
 
   public get<T>(endPoint : string): Observable<T>{

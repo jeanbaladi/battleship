@@ -1,6 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AuthService } from '../../auth/auth.service';
+import { ProfileService } from '../../profile.service';
+import { PlayerStatistics, Profile, ResponseHTTP } from 'src/app/interfaces';
+
+const INITIAL_INFO_VALUE: Profile = {
+  identityId: '',
+  userName: '',
+  address: '',
+  statistics: {
+    battlesWin: 0,
+    battlesLose: 0,
+    totalBattlesPlayed: 0,
+    elo: 0,
+  }
+}
 
 @Component({
   selector: 'app-profile-landing',
@@ -8,11 +20,15 @@ import { AuthService } from '../../auth/auth.service';
   styleUrls: ['./profile-landing.component.scss']
 })
 export class ProfileLandingComponent implements OnInit {
-
-  constructor(private route: ActivatedRoute, private authService : AuthService) {
+  public userInfo: Profile = INITIAL_INFO_VALUE;
+  constructor(private _profileService: ProfileService) {
 
   }
   ngOnInit(): void {
+    this._profileService.getStatistics()
+      .subscribe((response: ResponseHTTP<PlayerStatistics>) => {
+        this.userInfo = this._profileService.profileInfo;
+      });
   }
 
 }

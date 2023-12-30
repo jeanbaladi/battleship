@@ -28,7 +28,7 @@ export class NavBarComponent implements OnInit {
     if(path === this._navBarService.Logout)
       this._authService.logout();
     else if(path === this._navBarService.Profile) 
-      this._navBarService.handlerRoutes(`battleship/${path}/${this._authService.currentUser.profile.identityId}`);
+      this._navBarService.handlerRoutes(`battleship/${path}/${this._authService.authInfo.user.id}`);
     else this._navBarService.handlerRoutes(`battleship/${path}`);
   }
 

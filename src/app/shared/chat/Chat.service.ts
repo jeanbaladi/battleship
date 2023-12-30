@@ -22,9 +22,9 @@ export class ChatService extends WSService{
 
   public startConnection(path : string): void{
     this._currentUserDTO = {
-      address: this._authService.currentUser.profile.address,
-      identityId: this._authService.currentUser.profile.identityId,
-      userName: this._authService.currentUser.profile.userName,
+      address: this._authService.authInfo.user.email || '',
+      identityId: this._authService.authInfo.user.id,
+      userName: this._authService.authInfo.user.userName,
     };
     this._connection = this.connectionBuilder(path);
   }

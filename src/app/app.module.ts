@@ -12,6 +12,7 @@ import { MaterialModule } from './shared';
 import { ItemsComponent } from './shared/nav-bar/items/items.component';
 import { ChatService } from './shared/chat/Chat.service';
 import { NotificationService } from './services/notifications/notification.service';
+import { ProfileService } from './views/profile.service';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { NotificationService } from './services/notifications/notification.servi
     provideAnimations(),
     AuthService,
     ChatService,
+    ProfileService,
     NotificationService,
     NavBarService,
     {

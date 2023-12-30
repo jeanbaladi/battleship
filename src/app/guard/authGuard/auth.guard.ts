@@ -7,9 +7,9 @@ import { AuthService } from 'src/app/views/auth/auth.service';
 export const authGuard = () => {
   const router = inject(Router);
   const authService = inject(AuthService);
-  const currentUser : Auth = authService.currentUser;
-  const currentUserDTO : ProfileDTO = {identityId: currentUser.profile.identityId, userName: currentUser.profile.userName};
-  if(currentUser.profile.identityId) return true;
+  const currentUser : Auth = authService.authInfo;
+  const currentUserDTO : ProfileDTO = {identityId: currentUser.user.id, userName: currentUser.user.userName};
+  if(currentUser.user.id) return true;
   
   const token = localStorage.getItem('Token');
   if(token) {

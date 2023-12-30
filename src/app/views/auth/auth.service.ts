@@ -1,9 +1,23 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
-import { user, Auth, ResponseHTTP, ProfileDTO } from 'src/app/interfaces'
+import { user, Auth, ResponseHTTP, ProfileDTO, Profile, IdentityUser } from 'src/app/interfaces'
 import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { ProfileService } from '../profile.service';
+
+const INITIAL_INFO_VALUE: Profile = {
+  identityId: '',
+  userName: '',
+  address: '',
+  statistics: {
+    battlesWin: 0,
+    battlesLose: 0,
+    totalBattlesPlayed: 0,
+    elo: 0,
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,8 +33,8 @@ export class AuthService extends ApiService{
       tap((res: ResponseHTTP<Auth>) => {
         if(res.isSuccess){
           const {result} = res;
-          this.currentUser = result;
-          let userDTO: ProfileDTO = {identityId: result.profile.identityId, userName: result.profile.userName}
+          this.authInfo = result;
+          let userDTO: ProfileDTO = {identityId: result.user.id, userName: result.user.userName}
           this.currentUserDTO = userDTO;
           localStorage.setItem('Token', result.authenticationResponse.token as string);
           this.setCurrentToken(result.authenticationResponse.token);
@@ -50,8 +64,8 @@ export class AuthService extends ApiService{
         tap((res: ResponseHTTP<Auth>) => {
           if(res.isSuccess){
             const {result} = res;
-            this.currentUser = result;
-            this.currentUserDTO = {identityId: result.profile.identityId, userName: result.profile.userName};
+            this.authInfo = result;
+            this.currentUserDTO = {identityId: result.user.id, userName: result.user.userName};
             localStorage.setItem('Token', result.authenticationResponse.token as string);
             this.setCurrentToken(result.authenticationResponse.token);
           }
