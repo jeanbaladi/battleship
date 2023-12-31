@@ -22,9 +22,11 @@ export class GameComponent implements OnInit, OnDestroy{
   
   ngOnDestroy() {
     this._inGameService.refreshBoard();
-    this._inGameService.leaveTheGame(this._chatService.roomId).pipe(
-      take(1)
-    ).subscribe(res => console.log(res))
+    if(this._chatService.roomId){
+      this._inGameService.leaveTheGame(this._chatService.roomId).pipe(
+        take(1)
+      ).subscribe(res => console.log(res))
+    }
     this._inGameService.playerLeft(
       this._chatService.roomId, 
       this._chatService.currentUserDTO, 

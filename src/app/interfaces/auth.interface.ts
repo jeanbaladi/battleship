@@ -5,6 +5,7 @@ export interface user {
 export interface ProfileDTO {
     identityId: string,
     userName: string,
+    elo?: number
 }
 
 export interface authenticationResponse {

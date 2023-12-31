@@ -1,0 +1,1 @@
+export enum GameResult {winner, loser};

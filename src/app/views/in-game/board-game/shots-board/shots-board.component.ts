@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { InGameService } from '../../inGame.service';
 import { ResponseHTTP, coordinate, userDTO } from 'src/app/interfaces';
 import { AuthService } from 'src/app/views/auth/auth.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ChatService } from 'src/app/shared/chat/Chat.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationService } from 'src/app/services/notifications/notification.service';
@@ -26,6 +26,7 @@ export class ShootsBoardComponent {
     private ActivatedRoute: ActivatedRoute,
     private _chatService: ChatService,
     private _notificationService: NotificationService,
+    private _router: Router
   ){}
 
   ngOnInit(): void {
@@ -55,9 +56,6 @@ export class ShootsBoardComponent {
 
     this._chatService.connection.on('shoot', (response: ResponseHTTP<string>, attackIsSuccessful, userAttacking: userDTO) => {
       if(response.isSuccess){
-        if(response.result != ""){
-          alert(response.result);
-        }else{
           const cloneBoard = this._inGameService.boardInPlay;
           //Soy yo quien ataca
           if(userAttacking.identityId === this._chatService.currentUserDTO.identityId){
@@ -73,7 +71,11 @@ export class ShootsBoardComponent {
             cloneBoard[attackIsSuccessful.coordinate.x][attackIsSuccessful.coordinate.y].status = 'attacked';
             this._inGameService.boardInPlay = cloneBoard;
           }
-        }
+          if(response.result != ""){
+            this._chatService.roomId = '';
+            this._inGameService.returnToInitialState();
+            this._router.navigate(['battleship/lobby']);
+          }
       }else{
         this._element = null;
         if(userAttacking.identityId === this._chatService.currentUserDTO.identityId){

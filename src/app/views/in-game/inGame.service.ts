@@ -1,24 +1,28 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { Board, ResponseHTTP, boardsData, coordinate, ships, shipsInBoard, userDTO } from 'src/app/interfaces';
+import { GameResult } from 'src/app/enums';
+import { Board, PlayerStatistics, ResponseHTTP, boardsData, coordinate, ships, shipsInBoard, userDTO } from 'src/app/interfaces';
 import { ApiService } from 'src/app/services/api.service';
+import { ProfileService } from '../profile.service';
+
+const SHIPS_INITIAL_STATE: Array<ships> = [
+  {id:'1', url:"🚢", length:2, dir: 'y', coordinate: null, boatParts: ['🚢','💦']},
+  {id:'2', url:"🚢", length:3, dir: 'y', coordinate: null, boatParts: ['🚢','🔲','💦']},
+  {id:'3', url:"🚢", length:4, dir: 'y', coordinate: null, boatParts: ['🚢','🔲','🔲','💦']},
+  {id:'4', url:"🚢", length:5, dir: 'y', coordinate: null, boatParts: ['🚢','🔲','🔲','🔲','💦']}
+]
 
 @Injectable({
   providedIn: 'root'
 })
 export class InGameService extends ApiService {
   public cellsSelected: Array<any> = [];
-  private _currentShipSelected!: ships;
+  private _currentShipSelected: ships | null = null;
   private _currentShipSelectedInBoard!: shipsInBoard;
-  private _currentShipElementSelected!: HTMLDivElement;
-  private _constShips!: Array<ships>;
-  private _ships: BehaviorSubject<Array<ships>> = new BehaviorSubject<Array<ships>>([
-    {id:'1', url:"🚢", length:2, dir: 'y', coordinate: null, boatParts: ['🚢','💦']},
-    {id:'2', url:"🚢", length:3, dir: 'y', coordinate: null, boatParts: ['🚢','🔲','💦']},
-    {id:'3', url:"🚢", length:4, dir: 'y', coordinate: null, boatParts: ['🚢','🔲','🔲','💦']},
-    {id:'4', url:"🚢", length:5, dir: 'y', coordinate: null, boatParts: ['🚢','🔲','🔲','🔲','💦']}
-  ]);
+  private _currentShipElementSelected!: HTMLDivElement | null;
+  private _constShips: Array<ships> = [];
+  private _ships: BehaviorSubject<Array<ships>> = new BehaviorSubject<Array<ships>>(SHIPS_INITIAL_STATE);
   private _startGame: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private _shipsInBoard: Array<Array<boardsData>> = [];
   private _boardStatus: 'editable' | 'blocked' = 'editable'
@@ -26,19 +30,32 @@ export class InGameService extends ApiService {
   //---shots board
 
   //--oponente
-  private _opponent!: userDTO;
+  private _opponent: userDTO | null = null;
   
-  constructor(http: HttpClient) {
+  constructor(http: HttpClient, private _profileService: ProfileService) {
     super(http);
     this._constShips = JSON.parse(JSON.stringify(this._ships.getValue()));
   }
 
-  public get boardInPlay(){
-    return this._boardInPlay.getValue();;
+  public returnToInitialState(): void {
+    debugger
+    this.cellsSelected = [];
+    this._currentShipSelected = null;
+    this._currentShipSelectedInBoard = new shipsInBoard();
+    this._currentShipElementSelected = null;
+    this._constShips = [];
+    this._ships.next(SHIPS_INITIAL_STATE);
+    this._startGame.next(false);
+    this._shipsInBoard = [];
+    this._boardStatus = 'editable';
+    this._boardInPlay.next([]);
+    this._opponent = null;
+
   }
 
-  public set boardInPlay(value: Array<Array<shipsInBoard>>){
-    this._boardInPlay.next(value);
+  public updateStatistics(PlayerId: string, result: GameResult, opponentElo: number){
+    const body = {gameResult: result, opponentElo: opponentElo}
+    return this.post<PlayerStatistics>(`statistics/${PlayerId}/updateStatistics`, body);
   }
 
   public watchBoardInGame(): Observable<Array<Array<shipsInBoard>>> {
@@ -47,7 +64,7 @@ export class InGameService extends ApiService {
 
   public readyPlayer(newPlayer: Board): Observable<ResponseHTTP<string>> {
     this._boardStatus = 'blocked';
-    const boardsData =JSON.parse(JSON.stringify(newPlayer.boardsData));
+    const boardsData = JSON.parse(JSON.stringify(newPlayer.boardsData));
     let asd: any[] = [];
     boardsData.forEach((x: Array<shipsInBoard>) => {
       // console.log('fixObject', x);
@@ -66,6 +83,8 @@ export class InGameService extends ApiService {
 
       })
     });
+    newPlayer.profile.elo = this._profileService.profileInfo.statistics.elo;
+    // newPlayer.profile['elo'] = this._profileService.profileInfo.statistics.elo;
     newPlayer.boardsData = boardsData;
     // return new Observable;
     return this.post<ResponseHTTP<string>>('Game', newPlayer);
@@ -76,8 +95,6 @@ export class InGameService extends ApiService {
   }
 
   public startGame() {
-    console.log('startGame',this.ships.length );
-    console.log('startGame',this.shipsInBoard.length);
     this._startGame.next(this.ships.length === 0 && this.shipsInBoard.length === 4);
   }
 
@@ -118,6 +135,14 @@ export class InGameService extends ApiService {
     return this.Delete<string>('Game/player',id);
   }
 
+  public get boardInPlay(){
+    return this._boardInPlay.getValue();;
+  }
+
+  public set boardInPlay(value: Array<Array<shipsInBoard>>){
+    this._boardInPlay.next(value);
+  }
+
   public get constShips(): Array<ships>{
     return this._constShips;
   }
@@ -127,7 +152,7 @@ export class InGameService extends ApiService {
   }
 
   public get opponent(): userDTO{
-    return this._opponent;
+    return this._opponent as userDTO;
   }
   
   public set opponent(opponent: userDTO){
@@ -147,7 +172,7 @@ export class InGameService extends ApiService {
   }
 
   public get currentShipElementSelected(){
-    return this._currentShipElementSelected;
+    return this._currentShipElementSelected as HTMLDivElement;
   }
   
   public set currentShipSelectedInBoard(value: shipsInBoard){
@@ -163,7 +188,7 @@ export class InGameService extends ApiService {
   }
 
   public get currentShipSelected(){
-    return this._currentShipSelected;
+    return this._currentShipSelected as ships;
   }
   
   public set ships(value: Array<ships>){
