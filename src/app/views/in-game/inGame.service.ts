@@ -42,14 +42,12 @@ export class InGameService extends ApiService {
     this._currentShipSelected = null;
     this._currentShipSelectedInBoard = new shipsInBoard();
     this._currentShipElementSelected = null;
-    this._constShips = [];
-    this._ships.next(SHIPS_INITIAL_STATE);
+    this._ships.next(JSON.parse(JSON.stringify(this._constShips)));
     this._startGame.next(false);
     this._shipsInBoard = [];
     this._boardStatus = 'editable';
     this._boardInPlay.next([]);
     this._opponent = null;
-
   }
 
   public updateStatistics(PlayerId: string, result: GameResult, opponentElo: number){

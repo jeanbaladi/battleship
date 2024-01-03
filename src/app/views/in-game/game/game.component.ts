@@ -49,7 +49,7 @@ export class GameComponent implements OnInit, OnDestroy{
     }
     this._chatService.disconnectAllConection();
     this._chatService.removeAllMetHods();
-    this._inGameService.refreshBoard();
+    this._inGameService.returnToInitialState();
   }
 
 }
