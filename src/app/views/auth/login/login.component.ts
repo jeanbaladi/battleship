@@ -17,7 +17,6 @@ export class LoginComponent {
     this.loginForm = new FormGroup({
       Name : new FormControl('string', [
           Validators.required, 
-          Validators.pattern('[a-zA-Z ]*'),
           Validators.min(4),
           Validators.minLength(4)]),
       Password : new FormControl('String123+', [Validators.required,Validators.min(4)])

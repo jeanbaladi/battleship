@@ -38,7 +38,6 @@ export class InGameService extends ApiService {
   }
 
   public returnToInitialState(): void {
-    debugger
     this.cellsSelected = [];
     this._currentShipSelected = null;
     this._currentShipSelectedInBoard = new shipsInBoard();

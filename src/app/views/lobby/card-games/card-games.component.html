@@ -11,8 +11,14 @@
         <p>
             Id: {{gameCreator.id}}
         </p>
+        <p>
+            max player for group: {{gameCreator.maxPlayerForGroup}}
+        </p>
+        <p>
+            Number of players: {{gameCreator.playerCount}}
+        </p>
     </mat-card-content>
     <mat-card-actions>
-        <app-joint-btn [gameId]="gameCreator.id" [gameCreator]="gameCreator"></app-joint-btn>
+        <app-joint-btn [disable]="gameCreator.roomCompleted" [gameId]="gameCreator.id" [gameCreator]="gameCreator"></app-joint-btn>
     </mat-card-actions>
 </mat-card>

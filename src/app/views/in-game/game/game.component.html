@@ -5,4 +5,4 @@
     <app-board-game></app-board-game>
     <app-ships></app-ships>
 </div>
-<app-chat></app-chat>
+<app-chat [hubMethod]="'ReceiveMessage'" [pathConnection]="'gameHub'"></app-chat>

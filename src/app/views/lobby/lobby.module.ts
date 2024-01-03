@@ -9,6 +9,7 @@ import { JointBtnComponent } from './card-games/joint-btn/joint-btn.component';
 import { DeleteGameComponent } from './card-games/delete-game/delete-game.component';
 import { RootModule } from 'src/app/root/root.module';
 import { LobbyService } from './lobby.service';
+import { ChatModule } from 'src/app/shared';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { LobbyService } from './lobby.service';
   providers:[LobbyService],
   imports: [
     LobbyRoutingModule,
+    ChatModule,
     RootModule,
   ]
 })

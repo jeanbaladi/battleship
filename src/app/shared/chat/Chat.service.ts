@@ -16,11 +16,12 @@ export class ChatService extends WSService{
   private _currentUserDTO!: userDTO;
   private _roomId: string = '';
   private _metHodsNames: Array<string> = [];
+  private _chatRoomName: string = '';
   constructor(private _authService: AuthService) {
     super()
   }
 
-  public startConnection(path : string): void{
+  public startConnection(path : string): void {
     this._currentUserDTO = {
       address: this._authService.authInfo.user.email || '',
       identityId: this._authService.authInfo.user.id,
@@ -29,11 +30,9 @@ export class ChatService extends WSService{
     this._connection = this.connectionBuilder(path);
   }
 
-  emitValue(roonName: string, msg: MsgDTO){
-    console.log(this._currentUserDTO);
-    
-    this.connection.invoke('SendMssage', roonName, msg, this._currentUserDTO).catch(() => {
-      console.warn('WSS','error in webcokect');
+  emitValue(roonName: string, msg: MsgDTO, metHodName: string){
+    this.connection.invoke(metHodName, roonName, msg, this._currentUserDTO).catch((err) => {
+      console.warn('WSS','error in websokect', err);
     });
   }
 
@@ -58,6 +57,16 @@ export class ChatService extends WSService{
     this._metHodsNames.forEach((method) => {
       this.connection.off(method);
     });
+  }
+  /**
+   * Nombre del metodo para emitir mensajes en el websocket
+   */
+  public get chatRoomName(): string {
+    return this._chatRoomName;
+  }
+
+  public set chatRoomName(value: string) {
+    this._chatRoomName = value;
   }
 
   public get roomId(): string {

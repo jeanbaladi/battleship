@@ -25,7 +25,6 @@ export abstract class PathsService {
     this.eventsEvents$ = this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this._routes.forEach(r => r.active = false);
-        console.log(event);
         this._routes.find(r => event.url.includes(r.path))
         const getActiveRoute = this._routes.find(r => this.router.url.includes(r.path));
         if(getActiveRoute){

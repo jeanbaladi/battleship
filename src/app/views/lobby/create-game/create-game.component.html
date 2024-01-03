@@ -1,1 +1,19 @@
-<p>create-game works!</p>
+<form 
+    [formGroup]="form"
+    (submit)="createNewRoom()"
+>
+    <mat-form-field appearance="outline">
+        <mat-label>Room name</mat-label>
+        <input 
+            matInput 
+            #roomName
+            formControlName="roomName"
+        >
+        <button 
+            mat-icon-button matSuffix 
+            [disabled]="!roomName.value"
+        >
+            <mat-icon>Create</mat-icon>
+        </button>
+    </mat-form-field>
+</form>

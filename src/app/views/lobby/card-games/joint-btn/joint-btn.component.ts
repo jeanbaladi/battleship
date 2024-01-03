@@ -13,16 +13,22 @@ import { NavBarService } from 'src/app/shared/nav-bar/nav-bar.service';
 export class JointBtnComponent {
   @Input() gameCreator!: CreateGamingRoom;
   @Input() gameId: string = '';
+  @Input() disable: boolean = false;
 
   constructor(private _navBarService: NavBarService,private _chatService: ChatService,
     private router: Router){}
 
   joinGame(){
     console.log('response', this.gameCreator);
-    
-    this.router.navigate([`battleship/inGame/`,this.gameId], { queryParams: { 
+    if(!this.disable){
+      this.router.navigate([`battleship/inGame/`,this.gameId], { queryParams: { 
         roomName: this.gameCreator.roomName,
-        createdBy: this.gameCreator.createdBy}})
+        createdBy: this.gameCreator.createdBy,
+        maxPlayerForGroup: this.gameCreator.maxPlayerForGroup,
+        playerCount: this.gameCreator.playerCount,
+        roomCompleted: this.gameCreator.roomCompleted,
+      }})
+    }
 
     // this._navBarService.handlerRoutes(`battleship/inGame/`,{room: this.gameCreator},this.gameId);
   }

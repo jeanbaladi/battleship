@@ -43,6 +43,9 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
     this.room = {
       createdBy: this._route.snapshot.queryParams['createdBy'],
       roomName: this._route.snapshot.queryParams['roomName'],
+      maxPlayerForGroup: this._route.snapshot.queryParams['maxPlayerForGroup'],
+      playerCount: this._route.snapshot.queryParams['playerCount'],
+      roomCompleted: this._route.snapshot.queryParams['roomCompleted'],
       id: this.gameId
     }
     this._route.data.subscribe(res => console.log('response', res))

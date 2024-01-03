@@ -1,10 +1,15 @@
 <div
     class="container"
 >
+    <app-chat 
+        [hubMethod]="'ReceiveMessage'" 
+        [pathConnection]="'gamingRoomHub'"
+    ></app-chat>
     <mat-form-field class="example-full-width" appearance="fill">
         <mat-label>Search room</mat-label>
         <input matInput placeholder="room name">
     </mat-form-field>
+    <app-create-game></app-create-game>
     <div 
         class="rooms"
     >

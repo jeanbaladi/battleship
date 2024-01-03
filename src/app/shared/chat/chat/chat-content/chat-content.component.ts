@@ -25,6 +25,7 @@ import { MsgDTO, userDTO } from 'src/app/interfaces';
 export class ChatContentComponent implements OnInit {
   @Input() trigger: boolean = false;
   @Input() room: string = '';
+  @Input() hubMethod: string = '';
 
   @ViewChild('chatContentMessages') chatContentMessages!: HTMLDivElement;
   
@@ -43,52 +44,50 @@ export class ChatContentComponent implements OnInit {
       msg: new FormControl('')
     });
 
-    // this._chatService.connection.on('ReceiveMessage', (user: userDTO, msg: MsgDTO) => {
-    this._chatService.connection.on('ReceiveMessage', (user: userDTO, msg: MsgDTO) => {
-      console.log('WSS',msg.message);
-      
-      
-      const itsMyMsg = user.identityId === this._chatService.currentUserDTO.identityId;
-        if(
-          this.messages.length > 0
-        ){
+    if(this._chatService.connection){
+      this._chatService.connection.on(this.hubMethod, (user: userDTO, msg: MsgDTO) => {
+        console.log('WSS',msg.message);
+        const itsMyMsg = user.identityId === this._chatService.currentUserDTO.identityId;
           if(
-              itsMyMsg && 
-              this.messages[this.messages.length - 1].sender === "Me"
-            ){
-            this.messages.push({
-              position: 'left',
-              sender: 'Me',
-              msg: msg.message,
-              showSender: false
-            })
+            this.messages.length > 0
+          ){
+            if(
+                itsMyMsg && 
+                this.messages[this.messages.length - 1].sender === "Me"
+              ){
+              this.messages.push({
+                position: 'left',
+                sender: 'Me',
+                msg: msg.message,
+                showSender: false
+              })
+            }else{
+              this.messages.push({
+                position: itsMyMsg ? 'left': 'right',
+                sender: itsMyMsg ? 'Me' : user.userName,
+                msg: msg.message,
+                showSender: this.messages[this.messages.length - 1].sender == user.userName ? false : true
+              })
+            }
           }else{
             this.messages.push({
               position: itsMyMsg ? 'left': 'right',
               sender: itsMyMsg ? 'Me' : user.userName,
               msg: msg.message,
-              showSender: this.messages[this.messages.length - 1].sender == user.userName ? false : true
+              showSender: true
             })
           }
-        }else{
-          this.messages.push({
-            position: itsMyMsg ? 'left': 'right',
-            sender: itsMyMsg ? 'Me' : user.userName,
-            msg: msg.message,
-            showSender: true
-          })
-        }
-        console.log('chatContentMessages', this.chatContentMessages);
-        console.log('chatContentMessages', this.chatContentMessages.scrollHeight);
-    })
-    this._chatService.addMetHods('ReceiveMessage');
+      })
+
+      this._chatService.addMetHods(this.hubMethod);
+    }
   }
 
   sendMsg(){
     const value: MsgDTO = {message: this.formMsg.get('msg')?.value.replaceAll("  ", "")};
     this.formMsg.reset();
     if(!!value.message && value.message !== ' '){
-      this._chatService.emitValue(this.room, value);
+      this._chatService.emitValue(this.room, value, this._chatService.chatRoomName);
     }
   }
 
