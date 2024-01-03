@@ -25,23 +25,19 @@
             </div>
         </div>
     </div>
-    <button 
-        [disabled]="!startGame" 
-        mat-raised-button color="accent"
-        (click)="readyPlayer()"
-    >
-        start game
-    </button>
-    <button 
-        mat-raised-button color="accent"
-        (click)="refreshBoard()"
-    >
-        refresh board
-    </button>
-    <button 
-        mat-raised-button color="accent"
-        (click)="DeleteRoom()"
-    >
-        DELETE GAME
-    </button>
+    <div *ngIf="showBtns">
+        <button 
+            [disabled]="!startGame" 
+            mat-raised-button color="accent"
+            (click)="readyPlayer()"
+        >
+            start game
+        </button>
+        <button 
+            mat-raised-button color="accent"
+            (click)="refreshBoard()"
+        >
+            refresh board
+        </button>
+    </div>
 </div>

@@ -27,6 +27,7 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
   public gameId: string = '';
   public room!: CreateGamingRoom;
   public boardStatus: "editable" | "blocked" = 'editable';
+  public showBtns: boolean = true;
   constructor(
     private _inGameService: InGameService,
     private _authService: AuthService,
@@ -111,6 +112,8 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
             this._changeDetectorRef.detectChanges();
           })
         );
+        this.showBtns = false;
+        this._changeDetectorRef.detectChanges();
       }else{
 
       }
