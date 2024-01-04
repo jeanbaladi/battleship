@@ -10,7 +10,6 @@
             [id]="cell.idElement"
             [ngStyle]="{
                 'background-color': cell.cellBackgroundColor,
-                
                 'cursor': boardStatus == 'editable' ? 'pointer' : 'default' 
             }"
         >
@@ -21,7 +20,7 @@
                 [cdkDragData]="cell"
                 [class]="cell.status"
             >
-                {{cell.idElement}}
+                {{cell.url}}
             </div>
         </div>
     </div>

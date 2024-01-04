@@ -57,8 +57,8 @@ export abstract class ApiService {
     return this._authInfo.authenticationResponse.token as string;
   }
 
-  public get<T>(endPoint : string): Observable<T>{
-    return this.http.get<T>(`${this.apiURL}/${endPoint}`);
+  public get<T>(endPoint : string, params: HttpParams = new HttpParams()): Observable<T>{
+    return this.http.get<T>(`${this.apiURL}/${endPoint}`, {params});
   }
   public post<T>(endPoint : string, body: any, params: HttpParams = new HttpParams()): Observable<T>{
     return this.http.post<T>(`${this.apiURL}/${endPoint}`, body, {params});

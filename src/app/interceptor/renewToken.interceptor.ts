@@ -37,7 +37,7 @@ export class RenewTokenInterceptor implements HttpInterceptor {
         return response;
       }),
       catchError((err : HttpErrorResponse) => {
-        this.authService.logout();
+        //this.authService.logout();
         return throwError(() => err);
       })
     );

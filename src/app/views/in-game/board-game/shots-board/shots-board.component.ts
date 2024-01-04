@@ -1,25 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { InGameService } from '../../inGame.service';
-import { ResponseHTTP, coordinate, userDTO } from 'src/app/interfaces';
+import { ResponseHTTP, ShootBoard, coordinate, shipsInBoard, userDTO } from 'src/app/interfaces';
 import { AuthService } from 'src/app/views/auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChatService } from 'src/app/shared/chat/Chat.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationService } from 'src/app/services/notifications/notification.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-shoots-board',
   templateUrl: './shots-board.component.html',
   styleUrls: ['./shots-board.component.scss']
 })
-export class ShootsBoardComponent {
+export class ShootsBoardComponent implements OnInit, OnDestroy {
   private rows: number = 10;
   private col: number = 10;
-  public board: Array<Array<any>> = [];
+  public board: Array<Array<ShootBoard>> = [];
   public aux: any;
   public lastSelectection: Array<(HTMLElement | null)> = [];
   public repositionShip: Array<any> = [];
   private _element: HTMLDivElement | null = null;
+  private _subscriptions$: Array<Subscription> = [];
   constructor(
     private _inGameService: InGameService,
     private _authService: AuthService,
@@ -34,15 +36,15 @@ export class ShootsBoardComponent {
     for (let i = 0; i < this.rows; i++) {
       this.board.push([]);
       for (let j = 0; j < this.col; j++) {
-        const aux: any = {};
-          aux.idElement = `${i}-${j}`,
-          aux.status = 'empty',
-          aux.boatParts = [],
-          aux.coordinate = null,
-          aux.dir = 'y',
-          aux.id = '0',
-          aux.length = 0,
-          aux.url = "",
+        const aux: ShootBoard = new ShootBoard();
+          aux.idElement = `${i}-${j}`;
+          aux.status = 'empty';
+          // aux.boatParts = [],
+          // aux.coordinate = null,
+          // aux.dir = 'y',
+          // aux.id = '0',
+          // aux.length = 0,
+          // aux.url = "",
         this.board[i].push(aux);
       }
 
@@ -84,7 +86,34 @@ export class ShootsBoardComponent {
       }
     });
     this._chatService.addMetHods('shoot');
+
+    this._subscriptions$.push(
+      this._inGameService.watchBoardInGame().subscribe((board: Array<Array<shipsInBoard>>) => {
+        
+        if(this.board.length > 0){
+          board.forEach((row: shipsInBoard[], rowIndex: number) => {
+            row.forEach((cell: shipsInBoard, cellIndex: number) => {
+              if(cell.attackedCoordinate){
+                cell.attackedCoordinate.forEach((coor: coordinate) => {
+                  if(coor.state !== undefined){
+                    this.board[Number(coor.x)][Number(coor.y)].status = coor.state;
+                  }
+                })
+
+              }
+            });
+          });
+        }  
+      })
+    );
   }
+
+  ngOnDestroy(): void {
+    this._subscriptions$.forEach((sub) => {
+      sub.unsubscribe();
+    })
+  }
+
   shoot(coord: string, element: HTMLDivElement){
     this._element = element;
     const roomId: string = this.ActivatedRoute.snapshot.paramMap.get('gameId') || '';

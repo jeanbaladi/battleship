@@ -1,6 +1,6 @@
 import { CdkDragStart } from '@angular/cdk/drag-drop';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Board, CreateGamingRoom, ships, shipsInBoard } from 'src/app/interfaces';
+import { Board, CreateGamingRoom, ResponseHTTP, boardsData, coordinate, ships, shipsInBoard } from 'src/app/interfaces';
 import { InGameService } from '../../inGame.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/views/auth/auth.service';
@@ -34,10 +34,19 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _notificationService: NotificationService,
     private _chatService: ChatService,
-    private _changeDetectorRef : ChangeDetectorRef
+    private _changeDetectorRef : ChangeDetectorRef,
+    private _AuthService: AuthService
   ){}
 
   ngOnInit(): void {
+    this._subscriptions$.push(
+      this._inGameService.watchBoardInGame().subscribe((board: Array<Array<shipsInBoard>>) => {
+        if(this.board.length > 0){
+          this.board = board;
+          this._changeDetectorRef.detectChanges();
+        }  
+      })
+    );
     this.createBoard();
     this.boardStatus = this._inGameService.boardStatus;
     this.gameId = this._route.snapshot.paramMap.get('gameId') || '';
@@ -58,6 +67,37 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
         this.startGame = response;
       })
     );
+
+    this._inGameService.getBoardReady(this._chatService.roomId, this._AuthService.currentUserDTO.identityId)
+      .subscribe((response: ResponseHTTP<boardsData[][]>) => {
+        if(response.isSuccess){
+          this._inGameService.ships = [];
+          this.showBtns = false;
+          let boardsData: boardsData[][] = response.result;
+          boardsData.forEach((row: boardsData[]) => {
+            row.forEach((cell: boardsData) => {
+              const aux: shipsInBoard = new shipsInBoard();
+                aux.idElement = `${cell.id.idElement[0]}-${cell.id.idElement[2]}`;
+                aux.status = cell.id.status;
+                aux.boatParts =cell.id.boatParts;
+                aux.coordinate = cell.id.coordinate;
+                aux.dir = cell.id.dir;
+                aux.id = cell.id.id;
+                aux.length = cell.id.length;
+                aux.url = cell.id.url;
+                aux.attackedCoordinate = cell.id.attackedCoordinate;
+                aux.deadCoordinate = cell.id.deadCoordinate;
+              this.board[Number(cell.id.idElement[0])][Number(cell.id.idElement[2])] = aux;
+              cell.id.deadCoordinate?.forEach((coor: coordinate) => {
+                if(coor.state !== undefined){
+                  this.board[Number(coor.x)][Number(coor.y)].status = coor.state;
+                }
+              });
+            })
+          })
+          this._inGameService.boardInPlay = this.board;
+        }
+      })
     
   }
 
@@ -78,15 +118,15 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.rows; i++) {
       this.board.push([]);
       for (let j = 0; j < this.col; j++) {
-        const aux: shipsInBoard = new shipsInBoard()
-          aux.idElement = `${i}-${j}`,
-          aux.status = 'empty',
-          aux.boatParts = [],
-          aux.coordinate = null,
-          aux.dir = 'y',
-          aux.id = '0',
-          aux.length = 0,
-          aux.url = "",
+        const aux: shipsInBoard = new shipsInBoard();
+          aux.idElement = `${i}-${j}`;
+          aux.status = 'empty';
+          aux.boatParts = [];
+          aux.coordinate = null;
+          aux.dir = 'y';
+          aux.id = '0';
+          aux.length = 0;
+          aux.url = "";
         this.board[i].push(aux);
       }
     }
@@ -106,12 +146,6 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
           console.warn('WSS','error in webcokect');
         });
         this._notificationService.showNotification(response.result);
-        this._subscriptions$.push(
-          this._inGameService.watchBoardInGame().subscribe((board: Array<Array<shipsInBoard>>) => {
-            this.board = board;
-            this._changeDetectorRef.detectChanges();
-          })
-        );
         this.showBtns = false;
         this._changeDetectorRef.detectChanges();
       }else{
@@ -219,10 +253,10 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
                 this.board[x][y].status = 'empty';
               }else{
                 this.board[Number(cell.id[0])][Number(cell.id[2])].status = 'ocuped';
-                cell.children[0].innerHTML = `
-                  <span class="cdk-drag">
-                    ${data.boatParts[idx]}
-                  </span>`;
+                // cell.children[0].innerHTML = `
+                //   <span class="cdk-drag">
+                //     ${data.boatParts[idx]}
+                //   </span>`;
               }
             }
           }
@@ -241,7 +275,7 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
                   this.board[Number(cell.id[0])][Number(cell.id[2])].idElement = cell.id + 'selected';
                   this.board[Number(cell.id[0])][Number(cell.id[2])].id = data.id;
                   this.board[Number(cell.id[0])][Number(cell.id[2])].length = data.length;
-                  this.board[Number(cell.id[0])][Number(cell.id[2])].url = data.url;
+                  this.board[Number(cell.id[0])][Number(cell.id[2])].url = data.boatParts[cellIndex];
                   this.board[Number(cell.id[0])][Number(cell.id[2])].dir = data.dir;
                   this.board[Number(cell.id[0])][Number(cell.id[2])].coordinate = data.coordinate;
                   this.board[Number(cell.id[0])][Number(cell.id[2])].boatParts = data.boatParts;
@@ -306,11 +340,11 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
                     if(data.coordinate){
                       const oldCellsId0 = data.coordinate[cellIndex].x;
                       const oldCellsId1 = data.coordinate[cellIndex].y;
-                      const oldCellElement = document.getElementById(`${oldCellsId0}-${oldCellsId1}selected`);
+                      // const oldCellElement = document.getElementById(`${oldCellsId0}-${oldCellsId1}selected`);
                       
-                      if(oldCellElement){
-                        oldCellElement.children[0].innerHTML = `${oldCellElement.id.replace('selected', '')}`
-                      }
+                      // if(oldCellElement){
+                        //oldCellElement.children[0].innerHTML = `${oldCellElement.id.replace('selected', '')}`
+                      // }
                     }
                   });
                   

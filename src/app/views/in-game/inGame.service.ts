@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { GameResult } from 'src/app/enums';
@@ -50,6 +50,33 @@ export class InGameService extends ApiService {
     this._opponent = null;
   }
 
+  createBoard(board: any, rows: number, col: number){
+    board = [[]];
+    for (let i = 0; i < rows; i++) {
+      board.push([]);
+      for (let j = 0; j < col; j++) {
+        const aux: shipsInBoard = new shipsInBoard()
+          aux.idElement = `${i}-${j}`,
+          aux.status = 'empty',
+          aux.boatParts = [],
+          aux.coordinate = null,
+          aux.dir = 'y',
+          aux.id = '0',
+          aux.length = 0,
+          aux.url = "",
+        board[i].push(aux);
+      }
+    }
+    return board;
+  }
+
+  public getBoardReady(roomId: string, playerId: string): Observable<ResponseHTTP<Array<Array<boardsData>>>> {
+    const queryParams = new HttpParams()
+      .set('roomId', roomId)
+      .set('playerId', playerId);
+    return this.get<ResponseHTTP<Array<Array<boardsData>>>>(`Game/getboard`, queryParams);
+  }
+
   public updateStatistics(PlayerId: string, result: GameResult, opponentElo: number){
     const body = {gameResult: result, opponentElo: opponentElo}
     return this.post<PlayerStatistics>(`statistics/${PlayerId}/updateStatistics`, body);
@@ -62,20 +89,11 @@ export class InGameService extends ApiService {
   public readyPlayer(newPlayer: Board): Observable<ResponseHTTP<string>> {
     this._boardStatus = 'blocked';
     const boardsData = JSON.parse(JSON.stringify(newPlayer.boardsData));
-    let asd: any[] = [];
     boardsData.forEach((x: Array<shipsInBoard>) => {
-      // console.log('fixObject', x);
       x.forEach((j: any) => {
         const objectName = Object.keys(j)[0]
         const newName = 'id';
         j[newName] = j[objectName];
-        delete j[objectName]['id']
-        delete j[objectName]['url']
-        delete j[objectName]['dir']
-        delete j[objectName]['idElement']
-        delete j[objectName]['status']
-        delete j[objectName]['_cellBackgroundColor']
-        delete j[objectName]['boatParts']
         delete j[objectName];
 
       })
@@ -120,10 +138,14 @@ export class InGameService extends ApiService {
       });
   }
 
-  public playerLeft(room: string, user: userDTO, connection: signalR.HubConnection){
+  public playerLeft(
+    room: string, 
+    user: userDTO, 
+    connection: signalR.HubConnection, 
+    leftByRefresh: boolean
+  ){
     connection.invoke('PlayerLeft', 
-    room,
-    user).catch(() => {
+    room,user,leftByRefresh).catch(() => {
       console.warn('error in websokect');
     });
   }

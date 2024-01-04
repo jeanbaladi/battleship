@@ -16,11 +16,13 @@ export interface boardsData {
 }
 
 export class shipsInBoard implements ships {
-        public id: string = '';
+    public id: string = '';
     public length: number = 0;
     public url: string = '';
     public dir: "y" | "x" = 'y';
     public coordinate: coordinate[] | null  = null;
+    public attackedCoordinate: coordinate[] | null  = null;
+    public deadCoordinate: coordinate[] | null  = null;
     public boatParts: string[] = [];
     public idElement : string = '';
     public status:  'ocuped' | 'empty' |  'hover' | 'wrong' | 'attacked' = 'empty'
@@ -30,8 +32,9 @@ export class shipsInBoard implements ships {
         this._cellBackgroundColor = this.addCellBackgroundColor(this.status);
     }
 
-    public get cellBackgroundColor(){
-        return this.addCellBackgroundColor(this.status);
+    public get cellBackgroundColor(): string{
+        this._cellBackgroundColor = this.addCellBackgroundColor(this.status);;
+        return this._cellBackgroundColor;
     }
 
     private addCellBackgroundColor(status:'ocuped' | 'empty' | 'hover' | 'wrong' | 'attacked'): string {
@@ -51,9 +54,39 @@ export class shipsInBoard implements ships {
     }
 }
 
+export class ShootBoard {
+    public idElement : string = '';
+    public status:  'ocuped' | 'empty' |  'hover' | 'wrong' | 'attacked' = 'empty'
+    private _cellBackgroundColor: string = '';
+
+    constructor(){
+        this._cellBackgroundColor = this.addCellBackgroundColor(this.status);
+    }
+    public get cellBackgroundColor(): string{
+        this._cellBackgroundColor = this.addCellBackgroundColor(this.status);;
+        return this._cellBackgroundColor;
+    }
+    private addCellBackgroundColor(status:'ocuped' | 'empty' |  'hover' | 'wrong' | 'attacked'): string {
+        switch(status){
+            case 'empty':
+                return '#8ACDD7'
+            case 'hover':
+                return '#0e836a'
+            case 'wrong':
+                return '#1D1C1A'
+            case 'ocuped':
+                return '#f987ba'
+            case 'attacked':
+                return '#0e836a'
+            
+        }
+    }
+}
+
 export interface coordinate {
     x: string,
-    y: string
+    y: string,
+    state?: 'ocuped' | 'empty' |  'hover' | 'wrong' | 'attacked',
 }
 
 export interface shots {
