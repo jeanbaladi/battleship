@@ -53,9 +53,12 @@ export class ChatComponent implements OnInit, OnDestroy {
             }
           });
     
-          this.chatService.connection.on('NotifyPlayerLeft', (user: userDTO) => {
+          this.chatService.connection.on('NotifyPlayerLeft', (msg: string, user: userDTO, TheGameIsOver: boolean) => {
             if(this.chatService.currentUserDTO.identityId !== user.identityId){
-              this._notificationService.showNotification(`${user.userName} left the room`);
+              this._notificationService.showNotification(msg);
+            }
+            if(TheGameIsOver){
+              this._router.navigate(['battleship/lobby']);
             }
           });
           this.chatService.addMetHods('UserAdded','NotifyPlayerLeft');

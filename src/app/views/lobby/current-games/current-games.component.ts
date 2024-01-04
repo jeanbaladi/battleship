@@ -3,6 +3,8 @@ import { LobbyService } from '../lobby.service';
 import { CreateGamingRoom, ResponseHTTP } from 'src/app/interfaces';
 import { ChatService } from 'src/app/shared/chat/Chat.service';
 import { Subscription, take } from 'rxjs';
+import { NotificationService } from 'src/app/services/notifications/notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-current-games',
@@ -13,7 +15,12 @@ export class CurrentGamesComponent implements OnInit, OnDestroy {
   public rooms: Array<CreateGamingRoom> = [];
   public connection!: signalR.HubConnection;
   private _subscriptions: Array<Subscription> = [];
-  constructor(private _lobbyService: LobbyService, private _chatService: ChatService){}
+  constructor(
+    private _lobbyService: LobbyService, 
+    private _chatService: ChatService, 
+    private _notificationService: NotificationService,
+    private _router: Router
+    ){}
 
   ngOnInit(): void {
     if(this.rooms.length == 0){
@@ -33,12 +40,29 @@ export class CurrentGamesComponent implements OnInit, OnDestroy {
     this._subscriptions.push(
       this._chatService.watchConnectionState().subscribe((res:signalR.HubConnectionState) => {
         console.log('Connection status: ',res.toString());
+        console.log('rooms', res.toString() );
         if(res.toString() === "Connected"){
-          this._chatService.connection.on('GamingRooms', (rooms: Array<CreateGamingRoom>) => {
-            console.log('rooms',  rooms );
-            this.rooms = rooms;
+          this._chatService.connection.on('GamingRooms', (roomsOrMsg: Array<CreateGamingRoom> | string, roomCreated: CreateGamingRoom, isSuccess: boolean) => {
+              console.log('rooms',  roomsOrMsg, roomCreated.createdBy );
+              if(isSuccess){
+                if(roomCreated.createdBy == this._chatService.currentUserDTO.userName){
+                  this._router.navigate([`battleship/inGame/`,roomCreated.id], { queryParams: { 
+                    roomName: roomCreated.roomName,
+                    createdBy: roomCreated.createdBy,
+                    maxPlayerForGroup: roomCreated.maxPlayerForGroup,
+                    playerCount: roomCreated.playerCount,
+                    roomCompleted: roomCreated.roomCompleted,
+                  }})
+                  return;
+                }
+                this.rooms = (roomsOrMsg as Array<CreateGamingRoom>);
+              }else{
+                if(roomCreated.createdBy != this._chatService.currentUserDTO.userName){
+                  this._notificationService.showNotification(roomsOrMsg as string);
+                }
+              }
           })
-
+          
           this._chatService.addMetHods('GamingRooms');
 
         }

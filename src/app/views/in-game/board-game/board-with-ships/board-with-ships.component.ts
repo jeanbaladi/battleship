@@ -68,36 +68,36 @@ export class BoardWithShipsComponent implements OnInit, OnDestroy {
       })
     );
 
-    this._inGameService.getBoardReady(this._chatService.roomId, this._AuthService.currentUserDTO.identityId)
-      .subscribe((response: ResponseHTTP<boardsData[][]>) => {
-        if(response.isSuccess){
-          this._inGameService.ships = [];
-          this.showBtns = false;
-          let boardsData: boardsData[][] = response.result;
-          boardsData.forEach((row: boardsData[]) => {
-            row.forEach((cell: boardsData) => {
-              const aux: shipsInBoard = new shipsInBoard();
-                aux.idElement = `${cell.id.idElement[0]}-${cell.id.idElement[2]}`;
-                aux.status = cell.id.status;
-                aux.boatParts =cell.id.boatParts;
-                aux.coordinate = cell.id.coordinate;
-                aux.dir = cell.id.dir;
-                aux.id = cell.id.id;
-                aux.length = cell.id.length;
-                aux.url = cell.id.url;
-                aux.attackedCoordinate = cell.id.attackedCoordinate;
-                aux.deadCoordinate = cell.id.deadCoordinate;
-              this.board[Number(cell.id.idElement[0])][Number(cell.id.idElement[2])] = aux;
-              cell.id.deadCoordinate?.forEach((coor: coordinate) => {
-                if(coor.state !== undefined){
-                  this.board[Number(coor.x)][Number(coor.y)].status = coor.state;
-                }
-              });
-            })
-          })
-          this._inGameService.boardInPlay = this.board;
-        }
-      })
+    // this._inGameService.getBoardReady(this._chatService.roomId, this._AuthService.currentUserDTO.identityId)
+    //   .subscribe((response: ResponseHTTP<boardsData[][]>) => {
+    //     if(response.isSuccess){
+    //       this._inGameService.ships = [];
+    //       this.showBtns = false;
+    //       let boardsData: boardsData[][] = response.result;
+    //       boardsData.forEach((row: boardsData[]) => {
+    //         row.forEach((cell: boardsData) => {
+    //           const aux: shipsInBoard = new shipsInBoard();
+    //             aux.idElement = `${cell.id.idElement[0]}-${cell.id.idElement[2]}`;
+    //             aux.status = cell.id.status;
+    //             aux.boatParts =cell.id.boatParts;
+    //             aux.coordinate = cell.id.coordinate;
+    //             aux.dir = cell.id.dir;
+    //             aux.id = cell.id.id;
+    //             aux.length = cell.id.length;
+    //             aux.url = cell.id.url;
+    //             aux.attackedCoordinate = cell.id.attackedCoordinate;
+    //             aux.deadCoordinate = cell.id.deadCoordinate;
+    //           this.board[Number(cell.id.idElement[0])][Number(cell.id.idElement[2])] = aux;
+    //           cell.id.deadCoordinate?.forEach((coor: coordinate) => {
+    //             if(coor.state !== undefined){
+    //               this.board[Number(coor.x)][Number(coor.y)].status = coor.state;
+    //             }
+    //           });
+    //         })
+    //       })
+    //       this._inGameService.boardInPlay = this.board;
+    //     }
+    //   })
     
   }
 

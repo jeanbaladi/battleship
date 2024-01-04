@@ -16,12 +16,12 @@ export class JointBtnComponent {
   @Input() disable: boolean = false;
 
   constructor(private _navBarService: NavBarService,private _chatService: ChatService,
-    private router: Router){}
+    private _router: Router){}
 
   joinGame(){
     console.log('response', this.gameCreator);
     if(!this.disable){
-      this.router.navigate([`battleship/inGame/`,this.gameId], { queryParams: { 
+      this._router.navigate([`battleship/inGame/`,this.gameId], { queryParams: { 
         roomName: this.gameCreator.roomName,
         createdBy: this.gameCreator.createdBy,
         maxPlayerForGroup: this.gameCreator.maxPlayerForGroup,
