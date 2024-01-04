@@ -39,27 +39,24 @@ export class CurrentGamesComponent implements OnInit, OnDestroy {
     this._chatService.chatRoomName = 'SendMssage';
     this._subscriptions.push(
       this._chatService.watchConnectionState().subscribe((res:signalR.HubConnectionState) => {
-        console.log('Connection status: ',res.toString());
-        console.log('rooms', res.toString() );
         if(res.toString() === "Connected"){
-          this._chatService.connection.on('GamingRooms', (roomsOrMsg: Array<CreateGamingRoom> | string, roomCreated: CreateGamingRoom, isSuccess: boolean) => {
-              console.log('rooms',  roomsOrMsg, roomCreated.createdBy );
+          this._chatService.connection.on('GamingRooms', (roomsOrMsg: Array<CreateGamingRoom> | string, roomCreated: CreateGamingRoom | null, CreatedBy:string,isSuccess: boolean) => {
               if(isSuccess){
-                if(roomCreated.createdBy == this._chatService.currentUserDTO.userName){
-                  this._router.navigate([`battleship/inGame/`,roomCreated.id], { queryParams: { 
-                    roomName: roomCreated.roomName,
-                    createdBy: roomCreated.createdBy,
-                    maxPlayerForGroup: roomCreated.maxPlayerForGroup,
-                    playerCount: roomCreated.playerCount,
-                    roomCompleted: roomCreated.roomCompleted,
-                  }})
-                  return;
+                if(roomCreated != null){
+                  if(roomCreated.createdBy == this._chatService.currentUserDTO.userName){
+                    this._router.navigate([`battleship/inGame/`,roomCreated.id], { queryParams: { 
+                      roomName: roomCreated.roomName,
+                      createdBy: roomCreated.createdBy,
+                      maxPlayerForGroup: roomCreated.maxPlayerForGroup,
+                      playerCount: roomCreated.playerCount,
+                      roomCompleted: roomCreated.roomCompleted,
+                    }})
+                    return;
+                  }
                 }
                 this.rooms = (roomsOrMsg as Array<CreateGamingRoom>);
-              }else{
-                if(roomCreated.createdBy != this._chatService.currentUserDTO.userName){
-                  this._notificationService.showNotification(roomsOrMsg as string);
-                }
+              }else if(CreatedBy == this._chatService.currentUserDTO.userName){
+                this._notificationService.showNotification(roomsOrMsg as string);
               }
           })
           
