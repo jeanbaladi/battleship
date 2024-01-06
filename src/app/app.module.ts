@@ -13,6 +13,7 @@ import { ItemsComponent } from './shared/nav-bar/items/items.component';
 import { ChatService } from './shared/chat/Chat.service';
 import { NotificationService } from './services/notifications/notification.service';
 import { ProfileService } from './views/profile.service';
+import { ControlSimultaneousSessionsInterceptor } from './interceptor/controlSimultaneousSessions.interceptor';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,11 @@ import { ProfileService } from './views/profile.service';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: RenewTokenInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ControlSimultaneousSessionsInterceptor,
       multi: true
     }
   ],

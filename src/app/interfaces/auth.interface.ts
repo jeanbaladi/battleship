@@ -32,4 +32,5 @@ export interface IdentityUser {
 export interface Auth {
     user: IdentityUser,
     authenticationResponse: authenticationResponse,
+    sessionId: string
 }

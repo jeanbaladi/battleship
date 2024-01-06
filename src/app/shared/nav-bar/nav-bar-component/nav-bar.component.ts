@@ -19,17 +19,14 @@ export class NavBarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.routes = this._navBarService.routes();
+    this.routes = this._navBarService.Routes;
   }
 
   handlerRoutes(navbarElements: navbarElements){
     const { path } = navbarElements;
+    console.log('logout', navbarElements);
     
-    if(path === this._navBarService.Logout)
-      this._authService.logout();
-    else if(path === this._navBarService.Profile) 
-      this._navBarService.handlerRoutes(`battleship/${path}/${this._authService.authInfo.user.id}`);
-    else this._navBarService.handlerRoutes(`battleship/${path}`);
+    navbarElements.method();
   }
 
   triggerMenu(){

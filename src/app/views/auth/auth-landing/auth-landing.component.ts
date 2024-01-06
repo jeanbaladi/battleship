@@ -29,7 +29,9 @@ export class AuthLandingComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    localStorage.setItem("SessionId", "unlogged");
+  }
 
   login(user: user){
     this._authService.login(user).subscribe((response: ResponseHTTP<Auth>) => {
@@ -42,9 +44,7 @@ export class AuthLandingComponent implements OnInit {
   }
 
   public loginSuccess(){
-    console.log(this._authService.authInfo.user.id);
-    
-    this._navBarService.handlerRoutes(`battleship/profile/${this._authService.authInfo.user.id}`);
+    this._navBarService.Routes.find((r) => r.path == 'profile')?.method();
   }
 
   setStatus(status : auth) {;

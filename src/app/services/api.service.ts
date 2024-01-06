@@ -7,7 +7,7 @@ import { Auth } from '../interfaces';
 const INITIAL_VALUE : Auth = {
   authenticationResponse: {
     expiration: new Date(),
-    token: null
+    token: null,
   },
   user: {
     accessFailedCount: 0,
@@ -25,7 +25,8 @@ const INITIAL_VALUE : Auth = {
     securityStamp: '',
     twoFactorEnabled: false,
     userName: '',
-  }
+  },
+  sessionId: "unlogged"
 }
 
 @Injectable({
@@ -47,6 +48,10 @@ export abstract class ApiService {
 
   public set authInfo(user: Auth) {
     this._authInfo = user;
+  }
+
+  public returnAuthInfoToInitialState(){
+    this._authInfo = INITIAL_VALUE;
   }
 
   public setCurrentToken(token: string | null) {

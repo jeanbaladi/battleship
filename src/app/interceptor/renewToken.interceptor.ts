@@ -6,10 +6,10 @@ import { AuthService } from '../views/auth/auth.service';
 @Injectable()
 export class RenewTokenInterceptor implements HttpInterceptor {
 
-  constructor(private authService : AuthService){}
+  constructor(private _authService : AuthService){}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let token = this.authService.currentToken;
+    let token = this._authService.currentToken;
     if(token) {
       req = req.clone({
         headers: req.headers.set("Authorization", `Bearer ${token}`)
@@ -18,21 +18,22 @@ export class RenewTokenInterceptor implements HttpInterceptor {
       if(localStorage.getItem('Token')){
         //login mediante refresh
         token = localStorage.getItem('Token') as string;
-
         req = req.clone({
           headers: req.headers.set("loginByRefresh", `true`)
         });
-        this.authService.loginByRefresh(token);
+        this._authService.loginByRefresh(token);
       }else{
-        this.authService.logout();
+        //this._authService.logout();
       }
     }
     return next.handle(req).pipe(
       map((response : any) => {
         let newToken : string = response?.headers?.get('authorization');
+        console.log('newToken',newToken);
+        
         if(newToken){
           localStorage.setItem('Token', newToken);
-          this.authService.setCurrentToken(newToken);
+          this._authService.setCurrentToken(newToken);
         }
         return response;
       }),

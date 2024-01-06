@@ -37,6 +37,7 @@ export class AuthService extends ApiService{
           let userDTO: ProfileDTO = {identityId: result.user.id, userName: result.user.userName}
           this.currentUserDTO = userDTO;
           localStorage.setItem('Token', result.authenticationResponse.token as string);
+          localStorage.setItem('SessionId', result.sessionId);
           this.setCurrentToken(result.authenticationResponse.token);
         }
       })
@@ -73,10 +74,15 @@ export class AuthService extends ApiService{
       )
   }
 
-  public logout(){
+  public logout(): Observable<ResponseHTTP<string>>{
+    console.log('logout','FN');
+    
     localStorage.setItem('Token', '');
+    this.returnAuthInfoToInitialState();
+    // this.authInfo.sessionId = "";
     this.setCurrentToken(null);
     this.route.navigate(['auth']);
+    return this.post<ResponseHTTP<string>>(`users/logout/${this.currentUserDTO.identityId}`, null);
   }
 
 }
