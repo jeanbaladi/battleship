@@ -10,11 +10,13 @@
     >
         <li 
             (click)="selectedRotue(item)"
+            routerLinkActive="active"
             class="nav__item"
             *ngFor="let item of routes;"
-            [ngClass]="{'active': item.active}"
         >
-            {{ item.path }}
+            <a class="nav__item--link" [routerLink]="item.path">
+                {{ item.path }}
+            </a>
         </li>
        
     </ul>
