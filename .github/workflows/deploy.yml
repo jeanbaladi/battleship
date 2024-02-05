@@ -33,9 +33,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Build battleship front app
-      run: echo "Build battleship front app"
-      run: npm i
-      run: npm run build
+      run: |
+        npm i
+        npm run build
     - name: Setup Pages
       uses: actions/configure-pages@v3
     - name: Upload artifact
