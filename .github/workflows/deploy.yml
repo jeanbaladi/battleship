@@ -36,7 +36,7 @@ jobs:
     - name: Build battleship front app
       run: |
         npm i
-        npm run build
+        npm run build -- --base-href=/battleship/
     - name: Setup Pages
       uses: actions/configure-pages@v3
     - name: Upload artifact
