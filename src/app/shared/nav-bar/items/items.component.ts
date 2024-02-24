@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { navbarElements } from 'src/app/interfaces';
 
 @Component({
@@ -20,13 +20,18 @@ import { navbarElements } from 'src/app/interfaces';
     ])
   ]
 })
-export class ItemsComponent {
+export class ItemsComponent implements OnChanges {
   @Input() itemsMenuIsOpen: boolean = true;
   @Output() itemsMenuIsOpenChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() routeChanged: EventEmitter<navbarElements> = new EventEmitter<navbarElements>();
   @Input() routes: Array<navbarElements> = [];
 
   constructor(){
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('changes', changes);
+    console.log('changes', this.itemsMenuIsOpen);
+    
   }
 
   triggerMenu(){

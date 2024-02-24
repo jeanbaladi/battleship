@@ -19,6 +19,8 @@ export class NavBarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('routes', this._navBarService.Routes);
+    
     this.routes = this._navBarService.Routes;
   }
 
