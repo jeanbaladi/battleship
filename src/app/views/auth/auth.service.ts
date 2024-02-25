@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
-import { user, Auth, ResponseHTTP, ProfileDTO, Profile, IdentityUser } from 'src/app/interfaces'
+import { user, Auth, ResponseHTTP, ProfileDTO, Profile, IdentityUser, PswRequirements, checkPsw } from 'src/app/interfaces'
 import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { ProfileService } from '../profile.service';
@@ -24,8 +24,41 @@ const INITIAL_INFO_VALUE: Profile = {
 export class AuthService extends ApiService{
   private isLogginByRefresh$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private _currentUserDTO! : ProfileDTO;
+  public pswRequirements: PswRequirements = {
+    hasUpperCase: "The password does not have at least one uppercase letter",
+    hasLowerCase: "The password does not have at least one lowercase letter",
+    hasNumeric: "The password does not have at least one number",
+    hasSpecialCaracter: "The password does not have at least one special caracter",
+  };
   constructor(http: HttpClient, private route: Router){
     super(http);
+  }
+
+  public pswValidator(value: string): string[] | string {
+    const hasUpperCase: boolean = /[A-Z]+/.test(value);
+    const hasLowerCase: boolean = /[a-z]+/.test(value);
+    const hasNumeric: boolean = /[0-9]+/.test(value);
+    const hasSpecialCaracter: boolean = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value);
+
+    const passwordValid = [
+      {"hasUpperCase":hasUpperCase, errMsg: this.pswRequirements['hasUpperCase']},
+      {"hasLowerCase":hasLowerCase, errMsg: this.pswRequirements['hasLowerCase']},
+      {"hasNumeric":hasNumeric, errMsg: this.pswRequirements['hasNumeric']},
+      {"hasSpecialCaracter":hasSpecialCaracter, errMsg: this.pswRequirements['hasSpecialCaracter']},
+    ];
+    const errMsgs: string[] = [];
+    passwordValid.forEach((req, i) => {
+      const values: string = Object.values(passwordValid[i])[0];
+      if(!values){
+        errMsgs.push(req.errMsg);
+        
+      }
+    })
+    if(errMsgs.length > 0){
+      return errMsgs;
+    }
+
+    return "valid";
   }
 
   public login(user: user): Observable<ResponseHTTP<Auth>> {    
@@ -74,9 +107,11 @@ export class AuthService extends ApiService{
       )
   }
 
+  public register(user: user): Observable<ResponseHTTP<Auth>> {
+    return this.post<ResponseHTTP<Auth>>('users/register', user);
+  }
+
   public logout(): Observable<ResponseHTTP<string>>{
-    console.log('logout','FN');
-    
     localStorage.setItem('Token', '');
     this.returnAuthInfoToInitialState();
     // this.authInfo.sessionId = "";

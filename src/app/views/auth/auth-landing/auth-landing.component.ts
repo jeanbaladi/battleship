@@ -6,6 +6,8 @@ import { user, Auth, ResponseHTTP } from 'src/app/interfaces'
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { NavBarService } from 'src/app/shared/nav-bar/nav-bar.service';
+import { NotificationService } from 'src/app/services/notifications/notification.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-auth-landing',
@@ -21,16 +23,17 @@ export class AuthLandingComponent implements OnInit {
     alt: `${this.authStatus} image`,
     class: this.authStatus
   };
+  public pswRequirements: string[] = [];
 
   constructor(
     private _authService: AuthService, 
-    private _navBarService: NavBarService) {
-
-
+    private _navBarService: NavBarService,
+    private _notificationService: NotificationService) {
   }
 
   ngOnInit(): void {
     localStorage.setItem("SessionId", "unlogged");
+    this.pswRequirements = Object.values(this._authService.pswRequirements);
   }
 
   login(user: user){
@@ -47,9 +50,26 @@ export class AuthLandingComponent implements OnInit {
     this._navBarService.Routes.find((r) => r.path == 'profile')?.method();
   }
 
-  setStatus(status : auth) {;
+  setStatus(status : auth) {
     this.authStatus = status;
     this.dataImg.class = status;
     this.dataImg.src = `../../../../assets/images/${status}.jpg`;
+  }
+
+  register(user: user){
+    this._authService.register(user).subscribe((res:ResponseHTTP<Auth>) => 
+      {
+        if(res.isSuccess){
+          this._notificationService.showNotification("your account has been created successfully");
+        }
+      },(error:HttpErrorResponse)=>{
+        if(error){
+          console.log(error);
+          if(error?.error?.result){
+            this._notificationService.showNotification(error?.error?.result[0].description);
+          }
+        }
+      }
+    )
   }
 }

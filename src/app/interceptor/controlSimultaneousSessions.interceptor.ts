@@ -22,8 +22,6 @@ export class ControlSimultaneousSessionsInterceptor implements HttpInterceptor {
 
         return next.handle(req).pipe(
             catchError((err : HttpErrorResponse) => {
-                //this._authService.logout();
-                console.log('throwError', err);
                 if(err.status == 401){
                     this._authService.logout().pipe(
                         take(1)

@@ -1,6 +1,6 @@
 export interface user {
-    Name : string,
-    Password: string
+    name : string,
+    password: string
 };
 export interface ProfileDTO {
     identityId: string,
@@ -33,4 +33,14 @@ export interface Auth {
     user: IdentityUser,
     authenticationResponse: authenticationResponse,
     sessionId: string
+}
+export interface checkPsw {
+    errMsg: string,
+    valid: boolean
+}
+export interface PswRequirements {
+    hasUpperCase: string,
+    hasLowerCase: string,
+    hasNumeric: string,
+    hasSpecialCaracter: string,
 }

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angul
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { user } from 'src/app/interfaces';
 import { auth } from 'src/app/types';
+import { environment } from 'src/environments/environments';
 
 @Component({
   selector: 'app-login',
@@ -15,11 +16,15 @@ export class LoginComponent {
   @Output('access') access : EventEmitter<user> = new EventEmitter<user>();
   constructor() {
     this.loginForm = new FormGroup({
-      Name : new FormControl('string', [
-          Validators.required, 
-          Validators.min(4),
-          Validators.minLength(4)]),
-      Password : new FormControl('String123+', [Validators.required,Validators.min(4)])
+      Name : new FormControl(environment.production ? '' : 'string', [
+        Validators.required, 
+        Validators.min(4),
+        Validators.minLength(4)]
+      ),
+      Password : new FormControl(environment.production ? '' : 'String123+', [
+        Validators.required,
+        Validators.min(4)
+      ])
     });
   }
 

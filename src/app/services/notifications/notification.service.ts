@@ -9,13 +9,14 @@ export class NotificationService {
   constructor(private _snackBar: MatSnackBar) { }
 
   public showNotification(
-    value: string, 
+    value: string | string[], 
     action: string = 'close',
     duration: number = 4 * 1000,
     verticalPosition: MatSnackBarVerticalPosition = 'top',
     horizontalPosition: MatSnackBarHorizontalPosition  = 'start',
   ){
-    this._snackBar.open(`${value}`, action, {
+    if(!Array.isArray(value)) value = [value]
+    this._snackBar.open(`${value.map(e => e).join("\n")}`, action, {
       duration,
       verticalPosition,
       horizontalPosition

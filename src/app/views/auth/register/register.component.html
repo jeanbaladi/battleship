@@ -2,11 +2,26 @@
     <form [formGroup]="registerForm" (ngSubmit)="register()" class="register__form">
         <mat-form-field>
             <mat-label>user name</mat-label>
-            <input matInput type="text" formControlName="Name" />
+            <input matInput type="text" formControlName="name" />
         </mat-form-field>
-        <mat-form-field>
-            <input matInput type="password" formControlName="Password" />
-        </mat-form-field>
+        <div>
+            <mat-form-field>
+                <input #psw matInput type="password" formControlName="password" (keyup)="checkRequirements()"/>
+            </mat-form-field>
+            <mat-progress-bar
+                mode="determinate" 
+                [color]=" (psw.value.length * progressBar) >= 99 ? 'primary' : 'warn'" 
+                [value]="psw.value.length * progressBar" 
+            ></mat-progress-bar>
+            <ul>
+                <li 
+                    *ngFor="let req of checkPsw"
+                    [ngStyle]="{'color': req.valid ? 'green' : 'red'}"
+                >
+                    {{req.errMsg}}
+                </li>
+            </ul>
+        </div>
         <button mat-raised-button type="submit" color="accent">Register</button>
     </form>
     <div class="alreadyAccount">

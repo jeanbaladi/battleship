@@ -6,7 +6,11 @@
         ></app-login>
     </div>
     <div class="register">
-        <app-register (login)="setStatus($event)"></app-register>
+        <app-register 
+            [pswRequirements]="pswRequirements"
+            (register)="register($event)"
+            (login)="setStatus($event)"
+        ></app-register>
     </div>
     <div class="imageSection" 
         [ngStyle]="{'background-image': 'url(' + dataImg.src + ')' }"
