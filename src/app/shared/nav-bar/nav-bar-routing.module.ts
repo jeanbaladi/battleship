@@ -5,6 +5,7 @@ import { ProfileModule } from 'src/app/views/profile/profile.module';
 import { NavBarComponent } from './nav-bar-component/nav-bar.component';
 import { LobbyModule } from 'src/app/views/lobby/lobby.module';
 import { InGameModule } from 'src/app/views/in-game/in-game.module';
+import { profileGuard } from 'src/app/guard/profileGuard/profile.guard';
 
 const routes: Routes = [
   {
@@ -14,7 +15,8 @@ const routes: Routes = [
       { 
         path: 'profile', 
         loadChildren : () => import('src/app/views/profile/profile.module')
-        .then(m => m.ProfileModule), 
+        .then(m => m.ProfileModule),
+        canActivate:[profileGuard] 
       },
       {
         path:"lobby" , 

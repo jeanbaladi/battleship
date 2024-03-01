@@ -6,6 +6,9 @@
         box-shadow: 3px 3px 7px #cecece, -4px 0px 7px #cecece;
         font-size: 1.3em;
     }
+    &__item.show--false {
+        display: none;
+    }
     &__item {
         list-style-type: none;
         padding: 15px;

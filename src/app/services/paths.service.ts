@@ -19,11 +19,11 @@ export abstract class PathsService {
   public eventsEvents$ : Subscription = new Subscription();
   
   private _routes: Array<navbarElements> = [
-    {path:"logout", active: false, method: () => {
-      this._authService.logout().pipe(take(1)).subscribe((response: ResponseHTTP<string>) => this.notificationService.showNotification(response.result));}
-    },
-    {path:"profile", active: false, method: () => {this.router.navigate([`battleship/profile/${this._authService.authInfo.user.id}`])}},
-    {path:"lobby", active: false, method: (params) => {this.router.navigate([`battleship/lobby`])}}
+    {path:"logout", active: false, isAccessible: true, method: () => {
+     this._authService.logout().pipe(take(1)).subscribe((response: ResponseHTTP<string>) => this.notificationService.showNotification(response.result));
+    }},
+    {path:"profile", active: false, isAccessible: true, method: () => {this.router.navigate([`battleship/profile/${this._authService.authInfo.user.id}`])}},
+    {path:"lobby", active: false, isAccessible: true, method: (params) => {this.router.navigate([`battleship/lobby`])}}
   ]
 
   constructor(public router: Router, private _authService: AuthService) {

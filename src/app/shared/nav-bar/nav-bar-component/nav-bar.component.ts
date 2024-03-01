@@ -19,16 +19,20 @@ export class NavBarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('routes', this._navBarService.Routes);
-    
     this.routes = this._navBarService.Routes;
+    if(this._authService.authInfo.roles.includes("guest")){
+      let profilePath = this.routes.find(x => x.path == "profile");
+      if(profilePath){
+        profilePath.isAccessible = false;
+      }
+    }
   }
 
   handlerRoutes(navbarElements: navbarElements){
     const { path } = navbarElements;
     console.log('logout', navbarElements);
     
-    navbarElements.method();
+   navbarElements.method();
   }
 
   triggerMenu(){

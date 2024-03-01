@@ -9,6 +9,8 @@ export const authGuard = () => {
   const authService = inject(AuthService);
   const currentUser : Auth = authService.authInfo;
   const currentUserDTO : ProfileDTO = {identityId: currentUser.user.id, userName: currentUser.user.userName};
+
+  if(currentUser.roles.includes("guest")) return true;
   if(currentUser.user.id) return true;
   
   const token = localStorage.getItem('Token');

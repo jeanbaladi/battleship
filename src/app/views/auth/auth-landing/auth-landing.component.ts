@@ -43,6 +43,8 @@ export class AuthLandingComponent implements OnInit {
       }else{
         console.log('error', response.result);
       }
+    },(error: HttpErrorResponse) => {
+      this._notificationService.showNotification(error?.error?.result);
     });
   }
 
@@ -58,6 +60,8 @@ export class AuthLandingComponent implements OnInit {
   }
 
   public loginSuccess(){
+    console.log('profile');
+    
     this._navBarService.Routes.find((r) => r.path == 'profile')?.method();
   }
 

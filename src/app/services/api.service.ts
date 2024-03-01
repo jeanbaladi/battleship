@@ -26,7 +26,8 @@ const INITIAL_VALUE : Auth = {
     twoFactorEnabled: false,
     userName: '',
   },
-  sessionId: "unlogged"
+  sessionId: "unlogged",
+  roles: []
 }
 
 @Injectable({
