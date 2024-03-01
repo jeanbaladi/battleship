@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
-import { user, Auth, ResponseHTTP, ProfileDTO, Profile, IdentityUser, PswRequirements, checkPsw } from 'src/app/interfaces'
+import { user, Auth, ResponseHTTP, ProfileDTO, Profile, IdentityUser, PswRequirements, checkPsw, PlayerGuest } from 'src/app/interfaces'
 import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { ProfileService } from '../profile.service';
@@ -63,6 +63,22 @@ export class AuthService extends ApiService{
 
   public login(user: user): Observable<ResponseHTTP<Auth>> {    
     return this.post<ResponseHTTP<Auth>>(`users/login`, user).pipe(
+      tap((res: ResponseHTTP<Auth>) => {
+        if(res.isSuccess){
+          const {result} = res;
+          this.authInfo = result;
+          let userDTO: ProfileDTO = {identityId: result.user.id, userName: result.user.userName}
+          this.currentUserDTO = userDTO;
+          localStorage.setItem('Token', result.authenticationResponse.token as string);
+          localStorage.setItem('SessionId', result.sessionId);
+          this.setCurrentToken(result.authenticationResponse.token);
+        }
+      })
+    );
+  }
+
+  public guestUserAccess(): Observable<ResponseHTTP<Auth>> {
+    return this.post<ResponseHTTP<Auth>>(`users/guest`, {}).pipe(
       tap((res: ResponseHTTP<Auth>) => {
         if(res.isSuccess){
           const {result} = res;

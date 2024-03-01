@@ -13,6 +13,10 @@
         <button mat-raised-button type="submit" color="accent">Login</button> 
     </form>
     <div class="login__createAccount">
-        <p>Don't have an account? <b (click)="createAccount.emit('register')">Create Now</b></p>
+        <p>Don't have an account?</p>
+            <b (click)="createAccount.emit('register')">Create Now </b> 
+            or 
+            <b (click)="guestUserAccess()">Play as a guest</b>
+        
     </div>
 </div>

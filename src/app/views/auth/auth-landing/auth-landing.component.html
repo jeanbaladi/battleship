@@ -3,6 +3,7 @@
         <app-login 
             (createAccount)="setStatus($event)"
             (access)="login($event)"
+            (guestAccess)="guestUserAccess()"
         ></app-login>
     </div>
     <div class="register">

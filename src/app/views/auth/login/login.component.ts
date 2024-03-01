@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environments';
 export class LoginComponent {
   public loginForm! : FormGroup;
   @Output('createAccount') createAccount : EventEmitter<auth> = new EventEmitter<auth>();
+  @Output('guestAccess') guestAccess : EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output('access') access : EventEmitter<user> = new EventEmitter<user>();
   constructor() {
     this.loginForm = new FormGroup({
@@ -33,5 +34,8 @@ export class LoginComponent {
     if(this.loginForm.valid){
       this.access.emit(this.loginForm.value as user);
     }
+  }
+  guestUserAccess(){
+    this.guestAccess.emit(true);
   }
 }

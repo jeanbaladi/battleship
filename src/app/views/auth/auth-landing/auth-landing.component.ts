@@ -46,6 +46,17 @@ export class AuthLandingComponent implements OnInit {
     });
   }
 
+  guestUserAccess(){
+    this._authService.guestUserAccess().subscribe(response => 
+      {
+        if(response.isSuccess){
+          this.loginSuccess();
+        }else{
+          console.warn('error', response.result);
+        }
+      });
+  }
+
   public loginSuccess(){
     this._navBarService.Routes.find((r) => r.path == 'profile')?.method();
   }

@@ -44,3 +44,8 @@ export interface PswRequirements {
     hasNumeric: string,
     hasSpecialCaracter: string,
 }
+export interface PlayerGuest {
+    Id: number,
+    IdentityId: string,
+    CreationDate: Date,
+}
