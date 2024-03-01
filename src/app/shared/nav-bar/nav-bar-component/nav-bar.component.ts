@@ -25,6 +25,8 @@ export class NavBarComponent implements OnInit {
       if(profilePath){
         profilePath.isAccessible = false;
       }
+    }else{
+      this.routes.forEach(r => r.isAccessible = true);
     }
   }
 
