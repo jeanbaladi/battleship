@@ -13,20 +13,9 @@ export interface authenticationResponse {
     expiration: Date,
 }
 export interface IdentityUser {
-    accessFailedCount: number,
-    concurrencyStamp: string,
     email: string | null,
     emailConfirmed: boolean,
     id: string,
-    lockoutEnabled: boolean,
-    lockoutEnd: null,
-    normalizedEmail: string | null,
-    normalizedUserName: string,
-    passwordHash: string,
-    phoneNumber: string | null,
-    phoneNumberConfirmed: boolean,
-    securityStamp: string,
-    twoFactorEnabled: boolean,
     userName: string,
 }
 export interface Auth {
