@@ -10,6 +10,8 @@ import { DeleteGameComponent } from './card-games/delete-game/delete-game.compon
 import { RootModule } from 'src/app/root/root.module';
 import { LobbyService } from './lobby.service';
 import { ChatModule } from 'src/app/shared';
+import { SideNavComponent } from './sideNav/side-nav/side-nav.component';
+
 
 
 @NgModule({
@@ -18,7 +20,8 @@ import { ChatModule } from 'src/app/shared';
     CardGamesComponent,
     CreateGameComponent,
     JointBtnComponent,
-    DeleteGameComponent
+    DeleteGameComponent,
+    SideNavComponent
   ],
   providers:[LobbyService],
   imports: [

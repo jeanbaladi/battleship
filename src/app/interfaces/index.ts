@@ -6,3 +6,4 @@ export * from './lobby.interface';
 export * from './chatHub.interface';
 export * from './board.interface';
 export * from './profile.interface';
+// export * from './sideNav.interface';

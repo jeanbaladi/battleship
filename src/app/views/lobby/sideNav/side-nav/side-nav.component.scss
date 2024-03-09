@@ -1,0 +1,16 @@
+.sidenav {
+    height: 100vh;
+    overflow-x: overlay;
+    background-color: #c1d45d;
+    .users {
+        display: grid;
+        grid-template-columns: 70px auto;
+        &__img {
+            background-color: #fd89d7;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}

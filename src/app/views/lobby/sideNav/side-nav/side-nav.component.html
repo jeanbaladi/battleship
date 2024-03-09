@@ -1,0 +1,15 @@
+<div class="sidenav">
+    <mat-card *ngFor="let user of activeUsers">
+        <mat-card-content>
+            <div class="users">
+                <div class="users__img">
+                    <mat-icon>person</mat-icon>
+                </div>
+                <div class="users__info">
+                    <h2>{{user.userName}}</h2>
+                    <span>{{user.elo}}</span>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

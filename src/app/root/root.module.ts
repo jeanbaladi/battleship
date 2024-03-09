@@ -4,7 +4,6 @@ import { RootRoutingModule } from './root-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../shared';
 
-
 @NgModule({
   declarations: [],
   imports: [

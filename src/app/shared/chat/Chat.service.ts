@@ -48,7 +48,7 @@ export class ChatService extends WSService{
   public removeAllMetHods() {
     this._metHodsNames = [];
   }
-  public removeAMetHods(metHodName: string) {
+  public removeAMethods(metHodName: string) {
     const index = this._metHodsNames.indexOf(metHodName);
     this._metHodsNames.splice(index, 1);
   }
