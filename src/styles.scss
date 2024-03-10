@@ -1,6 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @import "styles/variables"; 
 @import "styles/landing-grid.scss"; 
+@import "styles/base-styles"; 
+@import "styles/common"; 
+// @import "styles/base-styles"; 
 
 html, body { 
     height: 100%; 

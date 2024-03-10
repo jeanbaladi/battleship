@@ -1,0 +1,7 @@
+@import "./mixin"; 
+
+@for $i from 3 through 8 {
+    .strong-#{$i}00 {
+        @include strong(#{$i}00)
+    }
+}

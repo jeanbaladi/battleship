@@ -12,6 +12,8 @@ import { Subscription } from 'rxjs';
 export class SideNavComponent implements OnInit, OnDestroy {
   public activeUsers: ProfileDTO[] = [];
   private _watchConnectionState$: Subscription;
+  public isOpenUserPanel: boolean = false;
+  public forceOpenPanel: boolean = false;
 
   constructor(
     private _sideNavService: SideNavService,
@@ -55,6 +57,15 @@ export class SideNavComponent implements OnInit, OnDestroy {
     this._chatService.addMetHods('usersActive');
   }
 
+  panelHandler(open: boolean) {
+    if(this.forceOpenPanel) return;
+    this.isOpenUserPanel = open;
+  }
+
+  openPanel(state: boolean) {
+    this.forceOpenPanel = state;
+    this.isOpenUserPanel = this.forceOpenPanel;
+  }
   
 
 }

@@ -1,15 +1,33 @@
-<div class="sidenav">
-    <mat-card *ngFor="let user of activeUsers">
-        <mat-card-content>
-            <div class="users">
-                <div class="users__img">
-                    <mat-icon>person</mat-icon>
-                </div>
-                <div class="users__info">
-                    <h2>{{user.userName}}</h2>
-                    <span>{{user.elo}}</span>
-                </div>
+<div 
+    class="sidenav" 
+    [ngClass]="{'open': isOpenUserPanel}"
+    (mouseover)="panelHandler(true)"
+    (mouseleave)="panelHandler(false)"
+>
+    <ng-container  *ngFor="let user of activeUsers">
+        <div class="users">
+            <div class="users__img">
+                <mat-icon>person</mat-icon>
             </div>
-        </mat-card-content>
-    </mat-card>
+            <div class="users__info" *ngIf="isOpenUserPanel">
+                <p class="strong-500">{{user.userName}}</p>
+                <span>{{user.elo}}</span>
+            </div>
+            <div class="users__options" *ngIf="isOpenUserPanel">
+                <button 
+                    mat-icon-button 
+                    [matMenuTriggerFor]="menu" 
+                    aria-label="Example icon-button with a menu"
+                    (click)="openPanel(true)"
+                >
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+            </div>
+        </div>
+    </ng-container>
 </div>
+
+<mat-menu #menu="matMenu" (closed)="openPanel(false)">
+  <button mat-menu-item>View profile</button>
+  <button mat-menu-item>Invite</button>
+</mat-menu>
