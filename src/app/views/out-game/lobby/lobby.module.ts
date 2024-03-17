@@ -21,12 +21,9 @@ import { SideNavComponent } from './sideNav/side-nav/side-nav.component';
     CreateGameComponent,
     JointBtnComponent,
     DeleteGameComponent,
-    SideNavComponent
   ],
-  providers:[LobbyService],
   imports: [
     LobbyRoutingModule,
-    ChatModule,
     RootModule,
   ]
 })

@@ -10,6 +10,7 @@ import { InGameService } from 'src/app/views/in-game/inGame.service';
 import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { NotificationService } from 'src/app/services/notifications/notification.service';
 import { Subscription } from 'rxjs';
+import { NavBarService } from '../../nav-bar/nav-bar.service';
 
 @Component({
   selector: 'app-chat',
@@ -27,7 +28,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _authService: AuthService,
     private _inGameService: InGameService,
-    private _notificationService: NotificationService
+    private _notificationService: NotificationService,
+    private _navBarService: NavBarService
   ){}
 
   ngOnInit(): void {
@@ -58,7 +60,14 @@ export class ChatComponent implements OnInit, OnDestroy {
               this._notificationService.showNotification(msg);
             }
             if(TheGameIsOver){
-              this._router.navigate(['battleship/lobby']);
+              console.log('TheGameIsOver',TheGameIsOver);
+              
+              this.chatService.connection.invoke('Delete', this.chatService.roomId)
+              .catch((err) => {
+                console.warn('WSS','error in websokect', err);
+              });
+              
+              this._navBarService.Routes.find(r => r.path.includes('lobby'))?.method();
             }
           });
           this.chatService.addMetHods('UserAdded','NotifyPlayerLeft');

@@ -62,7 +62,7 @@ export class AuthLandingComponent implements OnInit {
   public loginSuccess(){
     console.log('profile');
     
-    this._navBarService.Routes.find((r) => r.path == 'profile')?.method();
+    this._navBarService.Routes.find((r) => r.path.includes('profile'))?.method();
   }
 
   setStatus(status : auth) {

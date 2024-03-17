@@ -128,11 +128,6 @@ export class AuthService extends ApiService{
   }
 
   public logout(): Observable<ResponseHTTP<string>>{
-    localStorage.setItem('Token', '');
-    this.returnAuthInfoToInitialState();
-    // this.authInfo.sessionId = "";
-    this.setCurrentToken(null);
-    this.route.navigate(['auth']);
     return this.post<ResponseHTTP<string>>(`users/logout/${this.currentUserDTO.identityId}`, null);
   }
 

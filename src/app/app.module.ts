@@ -14,6 +14,7 @@ import { ChatService } from './shared/chat/Chat.service';
 import { NotificationService } from './services/notifications/notification.service';
 import { ProfileService } from './views/profile.service';
 import { ControlSimultaneousSessionsInterceptor } from './interceptor/controlSimultaneousSessions.interceptor';
+import { OutGameComponent } from './views/out-game/out-game-lading/out-game.component';
 
 @NgModule({
   declarations: [

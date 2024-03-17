@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Profile } from 'src/app/interfaces';
-import { ProfileService } from '../../profile.service';
+import { ProfileService } from 'src/app/views/profile.service';
 
 const INITIAL_INFO_VALUE: Profile = {
   identityId: '',

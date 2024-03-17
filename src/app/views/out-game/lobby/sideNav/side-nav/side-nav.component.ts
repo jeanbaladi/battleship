@@ -1,8 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { SideNavService } from '../side-nav.service';
-import { ProfileDTO, ResponseHTTP } from 'src/app/interfaces';
+import { ProfileDTO, ResponseHTTP, userDTO } from 'src/app/interfaces';
 import { ChatService } from 'src/app/shared/chat/Chat.service';
 import { Subscription } from 'rxjs';
+import { NavBarService } from 'src/app/shared/nav-bar/nav-bar.service';
+
 
 @Component({
   selector: 'app-side-nav',
@@ -11,28 +13,31 @@ import { Subscription } from 'rxjs';
 })
 export class SideNavComponent implements OnInit, OnDestroy {
   public activeUsers: ProfileDTO[] = [];
-  private _watchConnectionState$: Subscription;
+  private _watchConnectionState$: Subscription = new Subscription();
   public isOpenUserPanel: boolean = false;
   public forceOpenPanel: boolean = false;
 
   constructor(
     private _sideNavService: SideNavService,
-    private _chatService: ChatService
+    private _chatService: ChatService,
+    private _navBarService: NavBarService,
+    
   ){
-    this._watchConnectionState$ = this._chatService.watchConnectionState().subscribe((res) => {
-      if(res == 'Connected'){
-        this.watchUserActives()
-      }
-    })
+    
   }
 
   ngOnInit(): void {
     this._sideNavService.getAllActiveUsers().subscribe((response: ResponseHTTP<ProfileDTO[]>) => {
       if(response.isSuccess){
-        console.log(response.result);
         this.activeUsers = response.result;
       }else{
 
+      }
+    });
+    this._watchConnectionState$ = this._chatService.watchConnectionState().subscribe((res) => {
+      console.log('debugger',res);
+      if(res == 'Connected'){
+        this.watchUserActives()
       }
     })
   }
@@ -43,6 +48,7 @@ export class SideNavComponent implements OnInit, OnDestroy {
 
   watchUserActives() {
     this._chatService.connection.on('usersActive', (response: string) => {
+      console.log('debugger',response);
       if(response !== "err"){
         const resHTTP = JSON.parse(response) as  ResponseHTTP<ProfileDTO[]>
         if(resHTTP.isSuccess){
@@ -55,6 +61,15 @@ export class SideNavComponent implements OnInit, OnDestroy {
       }
     });
     this._chatService.addMetHods('usersActive');
+  }
+
+  goToProfile(user: userDTO) {
+    console.log('debugger', user);
+    
+    const profileRoute = this._navBarService.Routes.find(r => r.path == "profile")
+    if(profileRoute){
+      profileRoute.method(user.identityId);
+    }
   }
 
   panelHandler(open: boolean) {

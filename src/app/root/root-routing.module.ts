@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../guard/authGuard/auth.guard';
-import { ProfileModule } from '../views/profile/profile.module';
 import { NavBarModule } from '../shared/nav-bar/nav-bar.module';
+import { ProfileModule } from '../views/out-game/profile/profile.module';
 
 const routes: Routes = [
   {path:"auth" , loadChildren : () => import('../views/auth/auth.module').then(m => m.AuthModule)},

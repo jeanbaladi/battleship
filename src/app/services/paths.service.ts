@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ResponseHTTP, navbarElements } from '../interfaces';
-import { NavigationEnd, Router, Event } from '@angular/router';
+import { NavigationEnd, Router, Event, NavigationCancel, NavigationError } from '@angular/router';
 import { Subscription, take } from 'rxjs';
 import { InGameService } from '../views/in-game/inGame.service';
 import { ChatService } from '../shared/chat/Chat.service';
@@ -19,16 +19,40 @@ export abstract class PathsService {
   public eventsEvents$ : Subscription = new Subscription();
   
   private _routes: Array<navbarElements> = [
-    {path:"logout", active: false, isAccessible: true, method: () => {
-     this._authService.logout().pipe(take(1)).subscribe((response: ResponseHTTP<string>) => this.notificationService.showNotification(response.result));
-    }},
-    {path:"profile", active: false, isAccessible: true, method: () => {this.router.navigate([`battleship/profile/${this._authService.authInfo.user.id}`])}},
-    {path:"lobby", active: false, isAccessible: true, method: (params) => {this.router.navigate([`battleship/lobby`])}}
+    {path:"logout", active: false, isAccessible: true, 
+      method: () => { 
+        this._authService.logout().pipe(take(1)).subscribe((response: ResponseHTTP<string>) => this.notificationService.showNotification(response.result));
+        localStorage.setItem('Token', '');
+        this._authService.returnAuthInfoToInitialState();
+        // this.authInfo.sessionId = "";
+        this._authService.setCurrentToken(null);
+        this.router.navigate(['auth']);
+      }
+    },
+    {path:"profile", active: false, isAccessible: true, 
+      method: (userId: string = this._authService.authInfo.user.id) => {
+        this.router.navigate([`battleship/outGame/profile/${userId}`])
+        console.log(this.router.url);
+      }
+    },
+    {path:"lobby", active: false, isAccessible: true, 
+      method: (params) => {
+        this.router.navigate([`battleship/outGame/lobby`])
+      }
+    }
   ]
 
   constructor(public router: Router, private _authService: AuthService) {
     this.eventsEvents$ = this.router.events.subscribe((event: Event) => {
+      
+      if (event instanceof NavigationError) { 
+        console.log('routing', event);
+      }
+      if (event instanceof NavigationCancel) { 
+        console.log('routing', event);
+      }
       if (event instanceof NavigationEnd) {
+        console.log('routing', event);
         this._routes.forEach(r => r.active = false);
         this._routes.find(r => event.url.includes(r.path))
         const getActiveRoute = this._routes.find(r => this.router.url.includes(r.path));
