@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Profile } from 'src/app/interfaces';
 import { ProfileService } from 'src/app/views/profile.service';
 
@@ -22,6 +22,7 @@ const INITIAL_INFO_VALUE: Profile = {
 export class UserInformationComponent implements OnInit {
   @Input('userInfo') public userInfo: Profile = INITIAL_INFO_VALUE;
   constructor(){}
-  ngOnInit(): void {}
 
+  ngOnInit(): void {}
+  
 }

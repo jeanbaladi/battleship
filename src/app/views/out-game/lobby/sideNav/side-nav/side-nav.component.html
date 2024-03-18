@@ -28,7 +28,7 @@
     </ng-container>
 </div>
 
-<mat-menu #menu="matMenu">
+<mat-menu #menu="matMenu" (closed)="openPanel(false)">
     <ng-template matMenuContent let-user="user">
     <button mat-menu-item (click)="goToProfile(user)">View profile</button>
     <button mat-menu-item>Invite</button>

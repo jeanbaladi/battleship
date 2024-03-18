@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { ResponseHTTP, navbarElements } from '../interfaces';
 import { NavigationEnd, Router, Event, NavigationCancel, NavigationError } from '@angular/router';
-import { Subscription, take } from 'rxjs';
+import { Observable, Subject, Subscription, take } from 'rxjs';
 import { InGameService } from '../views/in-game/inGame.service';
 import { ChatService } from '../shared/chat/Chat.service';
 import { AuthService } from '../views/auth/auth.service';
@@ -16,6 +16,7 @@ export abstract class PathsService {
   private _lobby: string = 'lobby';
   private _activeRoute: string = '';
   private notificationService = inject(NotificationService)
+  public changeProfileId: Subject<string> = new Subject<string>();
   public eventsEvents$ : Subscription = new Subscription();
   
   private _routes: Array<navbarElements> = [
@@ -32,7 +33,9 @@ export abstract class PathsService {
     {path:"profile", active: false, isAccessible: true, 
       method: (userId: string = this._authService.authInfo.user.id) => {
         this.router.navigate([`battleship/outGame/profile/${userId}`])
-        console.log(this.router.url);
+        this.changeProfileId.next(userId);
+        console.log('debugger',userId);
+        console.log('debugger',this.router.url);
       }
     },
     {path:"lobby", active: false, isAccessible: true, 
@@ -44,13 +47,6 @@ export abstract class PathsService {
 
   constructor(public router: Router, private _authService: AuthService) {
     this.eventsEvents$ = this.router.events.subscribe((event: Event) => {
-      
-      if (event instanceof NavigationError) { 
-        console.log('routing', event);
-      }
-      if (event instanceof NavigationCancel) { 
-        console.log('routing', event);
-      }
       if (event instanceof NavigationEnd) {
         console.log('routing', event);
         this._routes.forEach(r => r.active = false);
@@ -63,7 +59,10 @@ export abstract class PathsService {
       }
     });
   }
-
+  
+  public showProfileId(): Observable<string> {
+    return this.changeProfileId.asObservable();
+  }
 
   get Logout(): string{
     return this._logout;

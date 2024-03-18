@@ -3,7 +3,7 @@ import { AuthService } from './auth/auth.service';
 import { IdentityUser, PlayerStatistics, Profile, ResponseHTTP } from '../interfaces';
 import { ApiService } from '../services/api.service';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 const INITIAL_INFO_VALUE: Profile = {
   identityId: '',
@@ -35,6 +35,10 @@ export class ProfileService extends ApiService{
         }
       })
     )
+  }
+
+  public getProfile(identityId: string): Observable<ResponseHTTP<Profile[]>> {
+    return this.get<ResponseHTTP<Profile[]>>(`statistics/${identityId}/playerProfile`)
   }
 
   public buildProfile(user: IdentityUser, playerStatistics: PlayerStatistics){
