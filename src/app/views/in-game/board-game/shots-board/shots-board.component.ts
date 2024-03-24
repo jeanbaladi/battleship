@@ -76,7 +76,7 @@ export class ShootsBoardComponent implements OnInit, OnDestroy {
           if(response.result != ""){
             this._chatService.roomId = '';
             this._inGameService.returnToInitialState();
-            this._router.navigate(['battleship/lobby']);
+            this._router.navigate(['/battleship/outGame/lobby']);
           }
       }else{
         this._element = null;

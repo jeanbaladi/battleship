@@ -1,7 +1,9 @@
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Event, NavigationEnd, Router } from '@angular/router';
-import { Subscription, take } from 'rxjs';
+import { Subscription, catchError, of, take } from 'rxjs';
 import { PlayerStatistics, Profile, ResponseHTTP } from 'src/app/interfaces';
+import { NotificationService } from 'src/app/services/notifications/notification.service';
 import { NavBarService } from 'src/app/shared/nav-bar/nav-bar.service';
 import { ProfileService } from 'src/app/views/profile.service';
 
@@ -31,13 +33,12 @@ export class ProfileLandingComponent implements OnInit, OnDestroy {
     private _profileService: ProfileService,
     private _navBarService: NavBarService,
     private _activatedRoute: ActivatedRoute,
-    private _router: Router
+    private _notificationService: NotificationService
     ) {
       this.profileId = this._activatedRoute.snapshot.params['id'];
   }
   
   ngOnInit(): void {
-    console.log('asdadwqewedasd');
     this.getProfile();
     this._subscriptions$.push(
       this._navBarService.showProfileId().subscribe((id) => {
@@ -50,14 +51,25 @@ export class ProfileLandingComponent implements OnInit, OnDestroy {
 
   getProfile() {
     console.log('changes', this.profileId);
+
     this._profileService.getProfile(this.profileId)
       .pipe(take(1))
-      .subscribe((response: ResponseHTTP<Profile[]>) => {
-        console.log('asdadwqewedasd', response.result[0].identityId);
-        // var asd: any[] = response.result;
-        this.userInfo = response.result[0]
-        //console.log('changes',this.userInfo);
-      });
+      .subscribe((response: ResponseHTTP<Profile[]>) => 
+        {
+          console.log('asdadwqewedasd', response.isSuccess);
+          console.log('asdadwqewedasd', response.result);
+          console.log('asdadwqewedasd', response.result[0].identityId);
+          // var asd: any[] = response.result;
+          if(response.isSuccess){
+            this.userInfo = response.result[0]
+          }else{
+            this._notificationService.showNotification(JSON.stringify(response.result).replace('"', ""))
+            //this._navBarService.Routes.find(r => r.path == 'logout')?.method();
+          }
+          //console.log('changes',this.userInfo);
+        }
+
+    );
   }
 
   ngOnDestroy(): void {

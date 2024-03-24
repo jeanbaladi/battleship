@@ -21,7 +21,7 @@ const INITIAL_INFO_VALUE: Profile = {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService extends ApiService{
+export class AuthService extends ApiService {
   private isLogginByRefresh$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private _currentUserDTO! : ProfileDTO;
   public pswRequirements: PswRequirements = {

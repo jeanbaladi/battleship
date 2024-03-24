@@ -6,13 +6,15 @@ import { SideNavComponent } from './lobby/sideNav/side-nav/side-nav.component';
 import { OutGameComponent } from './out-game-lading/out-game.component';
 import { ChatModule } from 'src/app/shared';
 import { LobbyService } from './lobby/lobby.service';
+import { CheckIfTheUserIsInvitedPipe } from 'src/app/pipes/check-if-the-user-is-invited.pipe';
 
 
 
 @NgModule({
   declarations: [
     SideNavComponent,
-    OutGameComponent
+    OutGameComponent,
+    CheckIfTheUserIsInvitedPipe
   ],
   providers:[LobbyService],
   imports: [

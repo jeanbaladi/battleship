@@ -31,7 +31,7 @@ export abstract class PathsService {
       }
     },
     {path:"profile", active: false, isAccessible: true, 
-      method: (userId: string = this._authService.authInfo.user.id) => {
+      method: (userId: string = this._authService.authInfo.user.id, queryParams: any) => {
         this.router.navigate([`battleship/outGame/profile/${userId}`])
         this.changeProfileId.next(userId);
         console.log('debugger',userId);

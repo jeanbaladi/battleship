@@ -4,4 +4,4 @@ export interface navbarElements {
     isAccessible: boolean,
     method: method
 }
-type method = (params?:string) => void;
+type method = (params?:string, queryParams?: any) => void;

@@ -64,11 +64,9 @@ export class SideNavComponent implements OnInit, OnDestroy {
   }
 
   goToProfile(user: userDTO) {
-    console.log('debugger', user);
-    
     const profileRoute = this._navBarService.Routes.find(r => r.path == "profile")
     if(profileRoute){
-      profileRoute.method(user.identityId);
+      profileRoute.method(user.identityId, {userName: user.userName});
     }
   }
 

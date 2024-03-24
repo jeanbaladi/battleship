@@ -30,7 +30,7 @@
 
 <mat-menu #menu="matMenu" (closed)="openPanel(false)">
     <ng-template matMenuContent let-user="user">
-    <button mat-menu-item (click)="goToProfile(user)">View profile</button>
-    <button mat-menu-item>Invite</button>
+        <button mat-menu-item *ngIf="user.userName | checkIfTheUserIsInvited" (click)="goToProfile(user)">View profile</button>
+        <button mat-menu-item>Invite</button>
     </ng-template>
 </mat-menu>

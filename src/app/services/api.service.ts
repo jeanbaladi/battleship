@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, catchError, of } from 'rxjs';
 import { environment } from 'src/environments/environments';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
 import { Auth } from '../interfaces';
 
 const INITIAL_VALUE : Auth = {
@@ -53,13 +53,25 @@ export abstract class ApiService {
   }
 
   public get<T>(endPoint : string, params: HttpParams = new HttpParams()): Observable<T>{
-    return this.http.get<T>(`${this.apiURL}/${endPoint}`, {params});
+    return this.http.get<T>(`${this.apiURL}/${endPoint}`, {params}).pipe(
+      catchError((err: HttpErrorResponse) => {
+        return of<T>(err.error)
+      }),
+    );
   }
   public post<T>(endPoint : string, body: any, params: HttpParams = new HttpParams()): Observable<T>{
-    return this.http.post<T>(`${this.apiURL}/${endPoint}`, body, {params});
+    return this.http.post<T>(`${this.apiURL}/${endPoint}`, body, {params}).pipe(
+      catchError((err: HttpErrorResponse) => {
+        return of<T>(err.error)
+      }),
+    );;
   }
   public Delete<T>(endPoint : string, id: string): Observable<T>{
-    return this.http.delete<T>(`${this.apiURL}/${endPoint}/${id}`);
+    return this.http.delete<T>(`${this.apiURL}/${endPoint}/${id}`).pipe(
+      catchError((err: HttpErrorResponse) => {
+        return of<T>(err.error)
+      }),
+    );;
   }
 
 }

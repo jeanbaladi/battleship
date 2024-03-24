@@ -1,18 +1,17 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
-import { ProfileRoutingModule } from './profile-routing.module';
-import { ProfileLandingComponent } from './profile-landing/profile-landing.component';
-import { UserInformationComponent } from './user-information/user-information.component';
-import { GamesPlayedComponent } from './games-played/games-played.component';
 import { RootModule } from 'src/app/root/root.module';
+import { GamesPlayedComponent } from './games-played/games-played.component';
+import { ProfileLandingComponent } from './profile-landing/profile-landing.component';
+import { ProfileRoutingModule } from './profile-routing.module';
+import { UserInformationComponent } from './user-information/user-information.component';
 
 
 @NgModule({
   declarations: [
     ProfileLandingComponent,
     UserInformationComponent,
-    GamesPlayedComponent
+    GamesPlayedComponent,
   ],
   imports: [
     ProfileRoutingModule,
